@@ -57,9 +57,6 @@ class RegisterFragment : DialogFragment() {
                             binding.etPassowrd.text.toString().isNotEmpty() &&
                             binding.etConfirmPassowrd.text.toString().isNotEmpty()
                 if (start != 0) {
-                    binding.usernameContainer.error = null
-                    binding.emailContainer.error = null
-                    binding.passwordContainer.error = null
                     binding.confirmPasswordContainer.error = null
                 }
             }

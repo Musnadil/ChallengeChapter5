@@ -21,6 +21,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val arrayPantun = arrayOf(getString(R.string.pantun_satu),getString(R.string.pantun_dua),getString(R.string.pantun_tiga))
+        val pantun = arrayPantun.random()
+
+        binding.tvPantun.text = pantun
     }
 
 }

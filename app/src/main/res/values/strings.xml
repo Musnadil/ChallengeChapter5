@@ -19,4 +19,10 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="alredy_have_an_account">Alredy have an account?</string>
+    <string name="selamat_datang">Selamat datang,</string>
+    <string name="pantun_satu">Kerja bakti membersihkan kaca\nBersama sama menanam bunga\nJangan malas malasan untuk membaca\nKarena membaca jendela dunia</string>
+    <string name="pantun_dua">Kayu dibakar menjadi arang\nSore hari bertemu ica\nBagaimana ilmu datang\nKalau kamu malas membaca</string>
+    <string name="pantun_tiga">Pohon pedada di dalam taman\nJadi idaman si anak rusa\nMarilah anakanda marilah teman\nKita membaca sepanjang masa</string>
+    <string name="berita_hari_ini">Berita Hari Ini</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
 </resources>

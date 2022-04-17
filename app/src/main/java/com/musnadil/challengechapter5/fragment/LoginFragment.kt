@@ -79,7 +79,7 @@ class LoginFragment : DialogFragment() {
         binding.etPassowrd.addTextChangedListener(textWatcher)
 
         binding.btnLogin.setOnClickListener {
-            // bawa data username
+            // bawa data username ke home
             if (binding.cbRemember.isChecked){
                 val editorSp : SharedPreferences.Editor = preferences!!.edit()
                 editorSp.putString(USERNAME,binding.etUsername.text.toString())
