@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ChallengeChapter5</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="belum_punya_akun_daftar">Belum punya akun? Daftar</string>
+    <string name="disini">disini</string>
+    <string name="signin">Sign In</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="or">or</string>
+    <string name="img_google">img_google</string>
+    <string name="img_facebook">img_facebook</string>
+    <string name="img_twitter">img_twitter</string>
+    <string name="create_new_one">Create new one</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="alredy_have_an_account">Alredy have an account?</string>
+</resources>
