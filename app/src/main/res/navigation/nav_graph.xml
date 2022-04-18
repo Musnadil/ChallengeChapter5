@@ -15,7 +15,10 @@
             app:destination="@id/registerFragment"/>
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            />
     </dialog>
     <dialog
         android:id="@+id/registerFragment"
@@ -34,11 +37,35 @@
         tools:layout="@layout/fragment_home_login" >
         <action
             android:id="@+id/action_homeLoginFragment_to_loginFragment"
-            app:destination="@id/loginFragment"/>
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/homeLoginFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.musnadil.challengechapter5.fragment.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailNewsFragment"
+            app:destination="@id/detailNewsFragment"
+            app:enterAnim="@anim/slide_in"/>
+        <action
+            android:id="@+id/action_homeFragment_to_homeLoginFragment"
+            app:destination="@id/homeLoginFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"
+            app:exitAnim="@anim/zoom_out"
+            app:enterAnim="@anim/zoom_in"/>
+    </fragment>
+    <fragment
+        android:id="@+id/detailNewsFragment"
+        android:name="com.musnadil.challengechapter5.fragment.DetailNewsFragment"
+        android:label="fragment_detail_news"
+        tools:layout="@layout/fragment_detail_news" >
+        <action
+            android:id="@+id/action_detailNewsFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:exitAnim="@anim/slide_out"/>
+    </fragment>
 </navigation>
