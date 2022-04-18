@@ -27,15 +27,20 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater,container,false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // ini nanti diganti jangan menggunakan shared preferences
-        preferences = requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
-        binding.tvUsername.text = "Welcome ${preferences.getString(LoginFragment.USERNAME, null)}"
+        val username = arguments?.getString(LoginFragment.USERNAME)
+        preferences =
+            requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
+        if (preferences.getString(LoginFragment.USERNAME, null) == null) {
+            binding.tvUsername.text = username
+        } else {
+            binding.tvUsername.text = "${preferences.getString(LoginFragment.USERNAME, null)}"
+        }
         setPantun()
         logout()
         binding.tvWelcome.setOnClickListener {
@@ -44,15 +49,15 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun fatchNews(){
+    private fun fatchNews() {
         val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
         ApiClient.instance.getAllNews(apiKey = apiKey).enqueue(
             object : Callback<GetAllNews> {
                 override fun onResponse(call: Call<GetAllNews>, response: Response<GetAllNews>) {
                     val body = response.body()
                     if (body != null) {
-                        if (body.status == "ok"){
-                                Log.d("response", body.articles!![0].toString())
+                        if (body.status == "ok") {
+                            Log.d("response", body.articles!![0].toString())
                         }
 
                     }
@@ -64,11 +69,16 @@ class HomeFragment : Fragment() {
             })
     }
 
-    fun setPantun(){
-        val arrayPantun = arrayOf(getString(R.string.pantun_satu),getString(R.string.pantun_dua),getString(R.string.pantun_tiga))
+    fun setPantun() {
+        val arrayPantun = arrayOf(
+            getString(R.string.pantun_satu),
+            getString(R.string.pantun_dua),
+            getString(R.string.pantun_tiga)
+        )
         val pantun = arrayPantun.random()
         binding.tvPantun.text = pantun
     }
+
     fun logout() {
         binding.btnLogout.setOnClickListener {
             val dialogKonfirmasi = AlertDialog.Builder(requireContext())
@@ -78,7 +88,7 @@ class HomeFragment : Fragment() {
                 setNegativeButton("Batal") { dialog, which ->
                     dialog.dismiss()
                 }
-                setPositiveButton("Logout") { dialog, which ->
+                setPositiveButton("Ya") { dialog, which ->
                     dialog.dismiss()
 
                     preferences.edit().clear().apply()
