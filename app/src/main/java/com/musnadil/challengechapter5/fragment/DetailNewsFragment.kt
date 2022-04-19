@@ -47,6 +47,12 @@ class DetailNewsFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
+        binding.btnKunjungiLaman.setOnClickListener {
+            val bundle=Bundle().apply {
+                putString("url",urlLaman)
+            }
+            findNavController().navigate(R.id.action_detailNewsFragment_to_webViewFragment,bundle)
+        }
     }
 
 

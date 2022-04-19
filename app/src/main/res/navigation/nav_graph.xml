@@ -51,6 +51,7 @@
             app:destination="@id/detailNewsFragment"
             app:enterAnim="@anim/slide_in"
             app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/slide_out"
             />
         <action
             android:id="@+id/action_homeFragment_to_homeLoginFragment"
@@ -68,8 +69,17 @@
         <action
             android:id="@+id/action_detailNewsFragment_to_homeFragment"
             app:destination="@id/homeFragment"
+            app:popEnterAnim="@anim/zoom_out"
             app:popUpToSaveState="true"
             app:popUpTo="@id/detailNewsFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_detailNewsFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.musnadil.challengechapter5.fragment.WebViewFragment"
+        android:label="fragment_web_view"
+        tools:layout="@layout/fragment_web_view" />
 </navigation>
