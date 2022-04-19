@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
@@ -25,6 +28,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var preferences: SharedPreferences
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,13 +51,14 @@ class HomeFragment : Fragment() {
         setPantun()
         logout()
         fatchNews()
+        setCountry()
 
     }
 
 
-    private fun fatchNews() {
+    private fun fatchNews(country:String="id") {
         val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
-        ApiClient.instance.getAllNews(apiKey = apiKey).enqueue(
+        ApiClient.instance.getAllNews(country,apiKey = apiKey).enqueue(
             object : Callback<GetAllNews> {
                 override fun onResponse(call: Call<GetAllNews>, response: Response<GetAllNews>) {
                     val body = response.body()
@@ -62,26 +67,38 @@ class HomeFragment : Fragment() {
                         if (body != null) {
                             showList(body.articles)
                         }
-                    }else{
-                        Toast.makeText(requireContext(), "Server sedang sibuk", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "Server sedang sibuk", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
+
                 override fun onFailure(call: Call<GetAllNews>, t: Throwable) {
-                    Log.d("failure",t.message.toString())
+                    Log.d("failure", t.message.toString())
+                    Toast.makeText(requireContext(), "${t.message}", Toast.LENGTH_SHORT).show()
                 }
             })
     }
-    private fun showList(data: List<Article>?){
-        val adapter = NewsAdapter(object : NewsAdapter.OnClickListener{
-            override fun onClickItem(data: Article) {
 
+    private fun showList(data: List<Article>?) {
+        val adapter = NewsAdapter(object : NewsAdapter.OnClickListener {
+            override fun onClickItem(data: Article) {
+                val bundle = Bundle().apply {
+                    putString("img",data.urlToImage)
+                    putString("title",data.title)
+                    putString("publisher",data.source!!.name)
+                    putString("time_published",data.publishedAt)
+                    putString("content",data.content)
+                    putString("url_laman",data.url)
+                }
+                findNavController().navigate(R.id.action_homeFragment_to_detailNewsFragment,bundle)
             }
         })
         adapter.submitData(data)
         binding.rvBerita.adapter = adapter
     }
 
-    fun setPantun() {
+    private fun setPantun() {
         val arrayPantun = arrayOf(
             getString(R.string.pantun_satu),
             getString(R.string.pantun_dua),
@@ -91,7 +108,7 @@ class HomeFragment : Fragment() {
         binding.tvPantun.text = pantun
     }
 
-    fun logout() {
+    private fun logout() {
         binding.btnLogout.setOnClickListener {
             val dialogKonfirmasi = AlertDialog.Builder(requireContext())
             dialogKonfirmasi.apply {
@@ -110,5 +127,28 @@ class HomeFragment : Fragment() {
             dialogKonfirmasi.show()
         }
     }
+    private fun setCountry(){
+        val spinner = binding.spinnerCountry
+        val country = arrayOf("Indonesia","Malaysia")
+        val arrayAdapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_dropdown_item,country)
+        spinner.adapter = arrayAdapter
 
+        spinner.onItemSelectedListener = object  : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val countrySelected :String = if (country[position] == "Indonesia"){
+                    "id"
+                }else{
+                    "my"
+                }
+
+                Toast.makeText(requireContext(), "Menampilkan berita ${country[position]}", Toast.LENGTH_SHORT).show()
+                fatchNews(countrySelected)
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                Toast.makeText(requireContext(), "nothing selected", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
 }

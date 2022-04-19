@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface ApiService {
     @GET("top-headlines")
     fun getAllNews(
-        @Query("country") country :String = "id",
+        @Query("country") country :String ,
         @Query("apiKey") apiKey : String
     ) : Call<GetAllNews>
 }

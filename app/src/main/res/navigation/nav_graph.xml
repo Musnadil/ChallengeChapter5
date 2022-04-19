@@ -19,9 +19,6 @@
             app:enterAnim="@anim/zoom_in"
             app:exitAnim="@anim/zoom_out"
             />
-        <action
-            android:id="@+id/action_loginFragment_to_choiceCountryFragment"
-            app:destination="@id/choiceCountryFragment" />
     </dialog>
     <dialog
         android:id="@+id/registerFragment"
@@ -69,13 +66,4 @@
             android:id="@+id/action_detailNewsFragment_to_homeFragment"
             app:destination="@id/homeFragment"/>
     </fragment>
-    <dialog
-        android:id="@+id/choiceCountryFragment"
-        android:name="com.musnadil.challengechapter5.fragment.ChoiceCountryFragment"
-        android:label="fragment_choice_country"
-        tools:layout="@layout/fragment_choice_country" >
-        <action
-            android:id="@+id/action_choiceCountryFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </dialog>
 </navigation>

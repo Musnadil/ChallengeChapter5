@@ -55,12 +55,6 @@ class LoginFragment : DialogFragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvSignin.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_choiceCountryFragment)
-        }
-
-
-
         setUsername()
         myDb = UserDatabase.getInstance(requireContext())
 
