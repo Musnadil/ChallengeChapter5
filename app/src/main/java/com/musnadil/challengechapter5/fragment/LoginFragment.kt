@@ -55,6 +55,12 @@ class LoginFragment : DialogFragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.tvSignin.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_choiceCountryFragment)
+        }
+
+
+
         setUsername()
         myDb = UserDatabase.getInstance(requireContext())
 
@@ -127,7 +133,7 @@ class LoginFragment : DialogFragment() {
         super.onDestroy()
         _binding = null
     }
-    fun setUsername(){
+    private fun setUsername(){
         val username = arguments?.getString(USERNAME)
         if (username.isNullOrEmpty()) {
             binding.etUsername.hint = null
