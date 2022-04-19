@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
@@ -23,6 +25,7 @@ import com.musnadil.challengechapter5.api.service.ApiClient
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
 import com.musnadil.challengechapter5.room.database.UserDatabase
 import com.musnadil.challengechapter5.room.entity.User
+import com.musnadil.challengechapter5.viewmodel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -35,6 +38,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var preferences: SharedPreferences
     var myDb : UserDatabase? = null
+    lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,21 +52,17 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val username = arguments?.getString(LoginFragment.USERNAME)
         preferences = requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
-        if (preferences.getString(LoginFragment.USERNAME, null) == null) {
-            binding.tvUsername.text = username
-        } else {
-            binding.tvUsername.text = "${preferences.getString(LoginFragment.USERNAME, null)}"
+
+        getUser()
+        homeViewModel.userLoggedin.observe(viewLifecycleOwner){
+            binding.tvUsername.text = it.username
         }
         setPantun()
         logout()
         fatchNews("id")
         setCountry()
         updateUser()
-        getUser()
-
     }
-
-
     private fun fatchNews(country:String) {
         val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
         ApiClient.instance.getAllNews(country,apiKey = apiKey).enqueue(
@@ -87,7 +87,6 @@ class HomeFragment : Fragment() {
                             .show()
                     }
                 }
-
                 override fun onFailure(call: Call<GetAllNews>, t: Throwable) {
                     Log.d("failure", t.message.toString())
                     Toast.makeText(requireContext(), "${t.message}", Toast.LENGTH_SHORT).show()
@@ -155,11 +154,9 @@ class HomeFragment : Fragment() {
                 }else{
                     "my"
                 }
-
                 Toast.makeText(requireContext(), "Menampilkan berita ${country[position]}", Toast.LENGTH_SHORT).show()
                 fatchNews(countrySelected)
             }
-
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 Toast.makeText(requireContext(), "nothing selected", Toast.LENGTH_SHORT).show()
             }
@@ -185,6 +182,7 @@ class HomeFragment : Fragment() {
                         data.email,
                         data.password
                     )
+                    homeViewModel.getUser(user)
                     val navigateUpdate = HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(user)
                     binding.btnUpdate.setOnClickListener {
                         findNavController().navigate(navigateUpdate) }

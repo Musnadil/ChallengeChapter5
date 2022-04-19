@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.musnadil.challengechapter5.databinding.FragmentWebViewBinding
 
 
-class WebViewFragment() : Fragment() {
+class WebViewFragment : Fragment() {
     private var _binding: FragmentWebViewBinding? = null
     private val binding get() = _binding!!
     private lateinit var webView : WebView

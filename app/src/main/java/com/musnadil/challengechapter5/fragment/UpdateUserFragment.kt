@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.databinding.FragmentUpdateUserBinding
 import com.musnadil.challengechapter5.room.database.UserDatabase
 import com.musnadil.challengechapter5.room.entity.User
+import com.musnadil.challengechapter5.viewmodel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -24,6 +26,8 @@ class UpdateUserFragment : DialogFragment() {
     private val binding get()= _binding!!
     var myDb : UserDatabase? = null
     private val args : UpdateUserFragmentArgs by navArgs()
+    lateinit var homeViewModel: HomeViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,11 +42,10 @@ class UpdateUserFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         myDb = UserDatabase.getInstance(requireContext())
-
+        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         binding.etUsername.setText(args.user.username)
         binding.etEmail.setText(args.user.email)
         binding.etPassowrd.setText(args.user.password)
-
         binding.btnUpdate.setOnClickListener {
             val user = User(
                 args.user.id,
@@ -54,6 +57,7 @@ class UpdateUserFragment : DialogFragment() {
                 val result = myDb?.userDao()?.updateItem(user)
                 runBlocking(Dispatchers.Main) {
                     if (result != 0){
+                        homeViewModel.getUser(user)
                         Toast.makeText(requireContext(), "User berhasil diupdate", Toast.LENGTH_SHORT).show()
                     }else{
                         Toast.makeText(requireContext(), "User gagal diupdate", Toast.LENGTH_SHORT).show()
