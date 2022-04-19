@@ -30,6 +30,7 @@ class HomeFragment : Fragment() {
     private lateinit var preferences: SharedPreferences
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,8 +42,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val username = arguments?.getString(LoginFragment.USERNAME)
-        preferences =
-            requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
+        preferences = requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
         if (preferences.getString(LoginFragment.USERNAME, null) == null) {
             binding.tvUsername.text = username
         } else {
@@ -50,13 +50,13 @@ class HomeFragment : Fragment() {
         }
         setPantun()
         logout()
-        fatchNews()
+        fatchNews("id")
         setCountry()
 
     }
 
 
-    private fun fatchNews(country:String="id") {
+    private fun fatchNews(country:String) {
         val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
         ApiClient.instance.getAllNews(country,apiKey = apiKey).enqueue(
             object : Callback<GetAllNews> {
@@ -67,7 +67,15 @@ class HomeFragment : Fragment() {
                         if (body != null) {
                             showList(body.articles)
                         }
-                    } else {
+                    }else if (code == 400){
+                        Toast.makeText(requireContext(), "The request was unacceptable.", Toast.LENGTH_SHORT).show()
+                    }else if(code == 401){
+                        Toast.makeText(requireContext(), "Your API key was missing from the request, or wasn't correct.", Toast.LENGTH_SHORT).show()
+                    }else if(code == 429){
+                        Toast.makeText(requireContext(), "You made too many requests", Toast.LENGTH_SHORT).show()
+                    }else if(code ==500){
+                        Toast.makeText(requireContext(), "Something went wrong on our side.", Toast.LENGTH_SHORT).show()
+                    }else {
                         Toast.makeText(requireContext(), "Server sedang sibuk", Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -141,7 +149,6 @@ class HomeFragment : Fragment() {
                     "my"
                 }
 
-
                 Toast.makeText(requireContext(), "Menampilkan berita ${country[position]}", Toast.LENGTH_SHORT).show()
                 fatchNews(countrySelected)
             }
@@ -151,4 +158,5 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
 }

@@ -31,7 +31,7 @@ class DetailNewsFragment : Fragment() {
         val title = arguments?.getString("title")
         val sourceName = arguments?.getString("publisher")
         val publishedAt = arguments?.getString("time_published")
-        val content = arguments?.getString("content")
+        val content = arguments?.getString("content","Tidak ada konten yang di tampilkan, silahkan klik tumbol kunjungi laman berita untuk melihat detail berita")
         val urlLaman = arguments?.getString("url_laman")
 
         Glide.with(requireContext())
@@ -45,7 +45,7 @@ class DetailNewsFragment : Fragment() {
         binding.tvContent.text = content
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_detailNewsFragment_to_homeFragment)
+            findNavController().popBackStack()
         }
     }
 

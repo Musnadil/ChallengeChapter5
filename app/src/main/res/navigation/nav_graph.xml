@@ -49,8 +49,8 @@
         <action
             android:id="@+id/action_homeFragment_to_detailNewsFragment"
             app:destination="@id/detailNewsFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/zoom_out"
             />
         <action
             android:id="@+id/action_homeFragment_to_homeLoginFragment"
