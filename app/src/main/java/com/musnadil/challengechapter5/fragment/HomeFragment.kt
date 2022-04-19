@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.adapter.NewsAdapter
 import com.musnadil.challengechapter5.api.model.Article
@@ -38,6 +39,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var preferences: SharedPreferences
     var myDb : UserDatabase? = null
+    private val args : HomeFragmentArgs by navArgs()
     lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
@@ -50,7 +52,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val username = arguments?.getString(LoginFragment.USERNAME)
+        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         preferences = requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
 
         getUser()
@@ -162,20 +164,25 @@ class HomeFragment : Fragment() {
             }
         }
     }
-    fun updateUser(){
+    private fun updateUser(){
         binding.btnUpdate.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_updateUserFragment)
         }
     }
-    fun getUser(){
+    fun getUser() {
         myDb = UserDatabase.getInstance(requireContext())
-        preferences = requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
-        val username = preferences!!.getString(LoginFragment.USERNAME,"default username").toString()
-        val password = preferences!!.getString(LoginFragment.PASSWORD,"default password").toString()
-        lifecycleScope.launch(Dispatchers.IO){
-            val data = myDb?.userDao()?.getUser(username,password)
+        preferences =
+            requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
+        var username = preferences!!.getString(LoginFragment.USERNAME, null)
+        var password = preferences!!.getString(LoginFragment.PASSWORD, null)
+        if (username.isNullOrEmpty() && password.isNullOrEmpty()) {
+            username = args.username
+            password = args.password
+        }
+        lifecycleScope.launch(Dispatchers.IO) {
+            val data = myDb?.userDao()?.getUser(username.toString(), password.toString())
             runBlocking(Dispatchers.Main) {
-                if (data != null){
+                if (data != null) {
                     val user = User(
                         data.id,
                         data.username,
@@ -183,12 +190,15 @@ class HomeFragment : Fragment() {
                         data.password
                     )
                     homeViewModel.getUser(user)
-                    val navigateUpdate = HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(user)
+                    val navigateUpdate =
+                        HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(user)
                     binding.btnUpdate.setOnClickListener {
-                        findNavController().navigate(navigateUpdate) }
+                        findNavController().navigate(navigateUpdate)
+                    }
                 }
             }
         }
+
     }
 
 }

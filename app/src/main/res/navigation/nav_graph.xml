@@ -62,6 +62,11 @@
         <action
             android:id="@+id/action_homeFragment_to_updateUserFragment"
             app:destination="@id/updateUserFragment" />
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <argument android:name="password"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/detailNewsFragment"

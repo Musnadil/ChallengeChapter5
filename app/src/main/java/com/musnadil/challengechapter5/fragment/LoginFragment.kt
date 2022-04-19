@@ -104,10 +104,12 @@ class LoginFragment : DialogFragment() {
                         snackbar.show()
                     }else{
                         Toast.makeText(requireContext(), "Selamat datang ${binding.etUsername.text.toString()}", Toast.LENGTH_LONG).show()
-                        val bundle = Bundle().apply {
-                            putString(USERNAME,binding.etUsername.text.toString())
-                        }
-                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment,bundle)
+//                        val bundle = Bundle().apply {
+//                            putString(USERNAME,binding.etUsername.text.toString())
+//                            putString(PASSWORD,binding.etPassowrd.text.toString())
+//                        }
+                        val navigateHome =  LoginFragmentDirections.actionLoginFragmentToHomeFragment(binding.etUsername.text.toString(),binding.etPassowrd.text.toString())
+                        findNavController().navigate(navigateHome)
                     }
                 }
             }
