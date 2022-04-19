@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.adapter.NewsAdapter
@@ -20,6 +21,11 @@ import com.musnadil.challengechapter5.api.model.Article
 import com.musnadil.challengechapter5.api.model.GetAllNews
 import com.musnadil.challengechapter5.api.service.ApiClient
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
+import com.musnadil.challengechapter5.room.database.UserDatabase
+import com.musnadil.challengechapter5.room.entity.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,8 +34,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var preferences: SharedPreferences
-
-
+    var myDb : UserDatabase? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +57,8 @@ class HomeFragment : Fragment() {
         logout()
         fatchNews("id")
         setCountry()
+        updateUser()
+        getUser()
 
     }
 
@@ -155,6 +162,33 @@ class HomeFragment : Fragment() {
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 Toast.makeText(requireContext(), "nothing selected", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    fun updateUser(){
+        binding.btnUpdate.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_updateUserFragment)
+        }
+    }
+    fun getUser(){
+        myDb = UserDatabase.getInstance(requireContext())
+        preferences = requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
+        val username = preferences!!.getString(LoginFragment.USERNAME,"default username").toString()
+        val password = preferences!!.getString(LoginFragment.PASSWORD,"default password").toString()
+        lifecycleScope.launch(Dispatchers.IO){
+            val data = myDb?.userDao()?.getUser(username,password)
+            runBlocking(Dispatchers.Main) {
+                if (data != null){
+                    val user = User(
+                        data.id,
+                        data.username,
+                        data.email,
+                        data.password
+                    )
+                    val navigateUpdate = HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(user)
+                    binding.btnUpdate.setOnClickListener {
+                        findNavController().navigate(navigateUpdate) }
+                }
             }
         }
     }
