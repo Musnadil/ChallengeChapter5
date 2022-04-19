@@ -8,9 +8,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
+import com.musnadil.challengechapter5.adapter.NewsAdapter
+import com.musnadil.challengechapter5.api.model.Article
 import com.musnadil.challengechapter5.api.model.GetAllNews
 import com.musnadil.challengechapter5.api.service.ApiClient
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
@@ -43,9 +46,8 @@ class HomeFragment : Fragment() {
         }
         setPantun()
         logout()
-        binding.tvWelcome.setOnClickListener {
-            fatchNews()
-        }
+        fatchNews()
+
     }
 
 
@@ -55,18 +57,28 @@ class HomeFragment : Fragment() {
             object : Callback<GetAllNews> {
                 override fun onResponse(call: Call<GetAllNews>, response: Response<GetAllNews>) {
                     val body = response.body()
-                    if (body != null) {
-                        if (body.status == "ok") {
-                            Log.d("response", body.articles!![0].toString())
+                    val code = response.code()
+                    if (code == 200) {
+                        if (body != null) {
+                            showList(body.articles)
                         }
-
+                    }else{
+                        Toast.makeText(requireContext(), "Server sedang sibuk", Toast.LENGTH_SHORT).show()
                     }
                 }
                 override fun onFailure(call: Call<GetAllNews>, t: Throwable) {
-                    TODO("Not yet implemented")
+                    Log.d("failure",t.message.toString())
                 }
-
             })
+    }
+    private fun showList(data: List<Article>?){
+        val adapter = NewsAdapter(object : NewsAdapter.OnClickListener{
+            override fun onClickItem(data: Article) {
+
+            }
+        })
+        adapter.submitData(data)
+        binding.rvBerita.adapter = adapter
     }
 
     fun setPantun() {

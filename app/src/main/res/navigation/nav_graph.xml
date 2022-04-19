@@ -48,8 +48,7 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_detailNewsFragment"
-            app:destination="@id/detailNewsFragment"
-            app:enterAnim="@anim/slide_in"/>
+            app:destination="@id/detailNewsFragment"/>
         <action
             android:id="@+id/action_homeFragment_to_homeLoginFragment"
             app:destination="@id/homeLoginFragment"
@@ -65,7 +64,6 @@
         tools:layout="@layout/fragment_detail_news" >
         <action
             android:id="@+id/action_detailNewsFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:exitAnim="@anim/slide_out"/>
+            app:destination="@id/homeFragment"/>
     </fragment>
 </navigation>
