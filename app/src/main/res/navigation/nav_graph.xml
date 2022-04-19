@@ -50,7 +50,8 @@
             android:id="@+id/action_homeFragment_to_detailNewsFragment"
             app:destination="@id/detailNewsFragment"
             app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/zoom_out"
+            app:popExitAnim="@anim/slide_out"
+            app:exitAnim="@anim/fade_out"
             />
         <action
             android:id="@+id/action_homeFragment_to_homeLoginFragment"
@@ -82,7 +83,9 @@
             app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_detailNewsFragment_to_webViewFragment"
-            app:destination="@id/webViewFragment" />
+            app:destination="@id/webViewFragment"
+            app:enterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"/>
     </fragment>
     <fragment
         android:id="@+id/webViewFragment"
