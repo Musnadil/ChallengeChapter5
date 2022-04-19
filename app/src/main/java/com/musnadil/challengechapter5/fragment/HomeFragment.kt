@@ -141,6 +141,7 @@ class HomeFragment : Fragment() {
                     "my"
                 }
 
+
                 Toast.makeText(requireContext(), "Menampilkan berita ${country[position]}", Toast.LENGTH_SHORT).show()
                 fatchNews(countrySelected)
             }
@@ -148,7 +149,6 @@ class HomeFragment : Fragment() {
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 Toast.makeText(requireContext(), "nothing selected", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 }

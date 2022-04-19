@@ -48,7 +48,10 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_detailNewsFragment"
-            app:destination="@id/detailNewsFragment"/>
+            app:destination="@id/detailNewsFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"
+            />
         <action
             android:id="@+id/action_homeFragment_to_homeLoginFragment"
             app:destination="@id/homeLoginFragment"
@@ -64,6 +67,9 @@
         tools:layout="@layout/fragment_detail_news" >
         <action
             android:id="@+id/action_detailNewsFragment_to_homeFragment"
-            app:destination="@id/homeFragment"/>
+            app:destination="@id/homeFragment"
+            app:popUpToSaveState="true"
+            app:popUpTo="@id/detailNewsFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>
