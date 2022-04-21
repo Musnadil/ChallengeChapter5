@@ -56,14 +56,13 @@ class HomeFragment : Fragment() {
         preferences = requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
 
         getUser()
+        setPantun()
+        logout()
+        setCountry()
+        updateUser()
         homeViewModel.userLoggedin.observe(viewLifecycleOwner){
             binding.tvUsername.text = it.username
         }
-        setPantun()
-        logout()
-        fatchNews("id")
-        setCountry()
-        updateUser()
     }
     private fun fatchNews(country:String) {
         val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
@@ -169,7 +168,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_updateUserFragment)
         }
     }
-    fun getUser() {
+    private fun getUser() {
         myDb = UserDatabase.getInstance(requireContext())
         preferences =
             requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
@@ -190,15 +189,12 @@ class HomeFragment : Fragment() {
                         data.password
                     )
                     homeViewModel.getUser(user)
-                    val navigateUpdate =
-                        HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(user)
+                    val navigateUpdate = HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(user)
                     binding.btnUpdate.setOnClickListener {
                         findNavController().navigate(navigateUpdate)
                     }
                 }
             }
         }
-
     }
-
 }

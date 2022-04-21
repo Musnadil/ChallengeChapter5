@@ -27,6 +27,7 @@ class UpdateUserFragment : DialogFragment() {
     var myDb : UserDatabase? = null
     private val args : UpdateUserFragmentArgs by navArgs()
     lateinit var homeViewModel: HomeViewModel
+    private lateinit var preferences: SharedPreferences
 
 
     override fun onCreateView(
@@ -43,9 +44,12 @@ class UpdateUserFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         myDb = UserDatabase.getInstance(requireContext())
         homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-        binding.etUsername.setText(args.user.username)
-        binding.etEmail.setText(args.user.email)
-        binding.etPassowrd.setText(args.user.password)
+        preferences = requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
+        homeViewModel.userLoggedin.observe(viewLifecycleOwner){
+            binding.etUsername.setText(it.username)
+            binding.etEmail.setText(it.email)
+            binding.etPassowrd.setText(it.password)
+        }
         binding.btnUpdate.setOnClickListener {
             val user = User(
                 args.user.id,
@@ -57,6 +61,10 @@ class UpdateUserFragment : DialogFragment() {
                 val result = myDb?.userDao()?.updateItem(user)
                 runBlocking(Dispatchers.Main) {
                     if (result != 0){
+                        val editorSp : SharedPreferences.Editor = preferences.edit()
+                        editorSp.putString(LoginFragment.USERNAME,binding.etUsername.text.toString())
+                        editorSp.putString(LoginFragment.PASSWORD,binding.etPassowrd.text.toString())
+                        editorSp.apply()
                         homeViewModel.getUser(user)
                         Toast.makeText(requireContext(), "User berhasil diupdate", Toast.LENGTH_SHORT).show()
                     }else{

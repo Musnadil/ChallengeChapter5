@@ -17,13 +17,14 @@ class HomeLoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        findNavController().navigate(R.id.action_homeLoginFragment_to_loginFragment)
         _binding = FragmentHomeLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        findNavController().navigate(R.id.action_homeLoginFragment_to_loginFragment)
+
     }
 
     override fun onDestroy() {
