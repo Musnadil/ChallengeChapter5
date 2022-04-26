@@ -114,6 +114,12 @@ class LoginFragment : DialogFragment() {
                 }
             }
         }
+
+        with(binding){
+            icGoogle.setOnClickListener {Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()}
+            icFacebook.setOnClickListener {Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()}
+            icTwitter.setOnClickListener {Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()}
+        }
     }
 
     private fun closeKeyboard() {

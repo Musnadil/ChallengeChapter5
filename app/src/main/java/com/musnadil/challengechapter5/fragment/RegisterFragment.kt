@@ -70,6 +70,7 @@ class RegisterFragment : DialogFragment() {
 
         binding.btnSignIn.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+
             dialog?.hide()
         }
         binding.btnSignup.setOnClickListener {
@@ -82,8 +83,8 @@ class RegisterFragment : DialogFragment() {
             val objectUser = User(
                 null,
                 binding.etUsername.text.toString(),
-                binding.etPassowrd.text.toString(),
-                binding.etEmail.text.toString()
+                binding.etEmail.text.toString(),
+                binding.etPassowrd.text.toString()
             )
                 GlobalScope.async {
                     val result = myDb?.userDao()?.addUser(objectUser)
