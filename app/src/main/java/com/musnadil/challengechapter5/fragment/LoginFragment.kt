@@ -43,6 +43,8 @@ class LoginFragment : DialogFragment() {
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         dialog?.window?.setBackgroundDrawableResource(R.drawable.rounded_dialog)
         dialog?.window?.attributes?.windowAnimations = R.style.MyDialogAnimation
+        dialog?.setCancelable(false)
+        dialog?.setCanceledOnTouchOutside(false)
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
