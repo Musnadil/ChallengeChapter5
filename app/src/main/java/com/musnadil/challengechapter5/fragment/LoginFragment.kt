@@ -81,12 +81,7 @@ class LoginFragment : DialogFragment() {
         binding.etPassowrd.addTextChangedListener(textWatcher)
 
         binding.btnLogin.setOnClickListener {
-            if (binding.cbRemember.isChecked){
-                val editorSp : SharedPreferences.Editor = preferences!!.edit()
-                editorSp.putString(USERNAME,binding.etUsername.text.toString())
-                editorSp.putString(PASSWORD,binding.etPassowrd.text.toString())
-                editorSp.apply()
-            }
+            closeKeyboard()
             GlobalScope.async {
                 val result = myDb?.userDao()?.userCheck(
                     binding.etUsername.text.toString(),
@@ -94,7 +89,6 @@ class LoginFragment : DialogFragment() {
                 )
                 runBlocking(Dispatchers.Main) {
                     if (result == false){
-                        closeKeyboard()
                         val snackbar = Snackbar.make(it,"Gagal masuk mungkin anda salah memasukan email atau password",
                             Snackbar.LENGTH_INDEFINITE)
                         snackbar.setAction("Oke") {
@@ -105,11 +99,13 @@ class LoginFragment : DialogFragment() {
                         }
                         snackbar.show()
                     }else{
+                        if (binding.cbRemember.isChecked){
+                            val editorSp : SharedPreferences.Editor = preferences!!.edit()
+                            editorSp.putString(USERNAME,binding.etUsername.text.toString())
+                            editorSp.putString(PASSWORD,binding.etPassowrd.text.toString())
+                            editorSp.apply()
+                        }
                         Toast.makeText(requireContext(), "Selamat datang ${binding.etUsername.text.toString()}", Toast.LENGTH_LONG).show()
-//                        val bundle = Bundle().apply {
-//                            putString(USERNAME,binding.etUsername.text.toString())
-//                            putString(PASSWORD,binding.etPassowrd.text.toString())
-//                        }
                         val navigateHome =  LoginFragmentDirections.actionLoginFragmentToHomeFragment(binding.etUsername.text.toString(),binding.etPassowrd.text.toString())
                         findNavController().navigate(navigateHome)
                     }
