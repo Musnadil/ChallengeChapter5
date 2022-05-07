@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.musnadil.challengechapter5.R
+import com.musnadil.challengechapter5.UserManager
 import com.musnadil.challengechapter5.activity.MainActivity
 import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
 import com.musnadil.challengechapter5.room.database.UserDatabase
@@ -27,8 +28,11 @@ import kotlinx.coroutines.runBlocking
 class LoginFragment : DialogFragment() {
 
     private var myDb: UserDatabase? = null
-    private var _binding : FragmentLoginBinding? = null
+    private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private lateinit var userManager: UserManager
+    var username = ""
+    var password = ""
 
     companion object {
         const val SPUSER = "user_login"
@@ -53,17 +57,21 @@ class LoginFragment : DialogFragment() {
         super.onResume()
         dialog?.window?.setLayout(
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUsername()
+        userManager = UserManager(requireContext())
+
         myDb = UserDatabase.getInstance(requireContext())
 
         val preferences = this.activity?.getSharedPreferences(SPUSER, Context.MODE_PRIVATE)
-        if (preferences!!.getString(USERNAME,null)!=null){
+        if (preferences!!.getString(USERNAME, null) != null) {
             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-            val username = preferences.getString(USERNAME,null)
+            val username = preferences.getString(USERNAME, null)
             Toast.makeText(context, "Selamat datang $username", Toast.LENGTH_SHORT).show()
         }
 
@@ -71,10 +79,13 @@ class LoginFragment : DialogFragment() {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             dialog?.hide()
         }
-        val textWatcher = object : TextWatcher{
+        val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, p2: Int, p3: Int) {
-                binding.btnLogin.isEnabled = binding.etUsername.text.toString().isNotEmpty() && binding.etPassowrd.text.toString().isNotEmpty() }
+                binding.btnLogin.isEnabled = binding.etUsername.text.toString()
+                    .isNotEmpty() && binding.etPassowrd.text.toString().isNotEmpty()
+            }
+
             override fun afterTextChanged(p0: Editable?) {}
         }
         binding.etUsername.addTextChangedListener(textWatcher)
@@ -88,9 +99,11 @@ class LoginFragment : DialogFragment() {
                     binding.etPassowrd.text.toString()
                 )
                 runBlocking(Dispatchers.Main) {
-                    if (result == false){
-                        val snackbar = Snackbar.make(it,"Gagal masuk mungkin anda salah memasukan email atau password",
-                            Snackbar.LENGTH_INDEFINITE)
+                    if (result == false) {
+                        val snackbar = Snackbar.make(
+                            it, "Gagal masuk mungkin anda salah memasukan email atau password",
+                            Snackbar.LENGTH_INDEFINITE
+                        )
                         snackbar.setAction("Oke") {
                             snackbar.dismiss()
                             binding.etUsername.requestFocus()
@@ -98,25 +111,51 @@ class LoginFragment : DialogFragment() {
                             binding.etPassowrd.text!!.clear()
                         }
                         snackbar.show()
-                    }else{
-                        if (binding.cbRemember.isChecked){
-                            val editorSp : SharedPreferences.Editor = preferences!!.edit()
-                            editorSp.putString(USERNAME,binding.etUsername.text.toString())
-                            editorSp.putString(PASSWORD,binding.etPassowrd.text.toString())
-                            editorSp.apply()
+                    } else {
+                        if (binding.cbRemember.isChecked) {
+//                            val editorSp: SharedPreferences.Editor = preferences!!.edit()
+//                            editorSp.putString(USERNAME, binding.etUsername.text.toString())
+//                            editorSp.putString(PASSWORD, binding.etPassowrd.text.toString())
+//                            editorSp.apply()
                         }
-                        Toast.makeText(requireContext(), "Selamat datang ${binding.etUsername.text.toString()}", Toast.LENGTH_LONG).show()
-                        val navigateHome =  LoginFragmentDirections.actionLoginFragmentToHomeFragment(binding.etUsername.text.toString(),binding.etPassowrd.text.toString())
+                        Toast.makeText(
+                            requireContext(),
+                            "Selamat datang ${binding.etUsername.text.toString()}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        val navigateHome =
+                            LoginFragmentDirections.actionLoginFragmentToHomeFragment(
+                                binding.etUsername.text.toString(),
+                                binding.etPassowrd.text.toString()
+                            )
                         findNavController().navigate(navigateHome)
                     }
                 }
             }
         }
 
-        with(binding){
-            icGoogle.setOnClickListener {Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()}
-            icFacebook.setOnClickListener {Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()}
-            icTwitter.setOnClickListener {Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()}
+        with(binding) {
+            icGoogle.setOnClickListener {
+                Toast.makeText(
+                    requireContext(),
+                    "Coming Soon",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            icFacebook.setOnClickListener {
+                Toast.makeText(
+                    requireContext(),
+                    "Coming Soon",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            icTwitter.setOnClickListener {
+                Toast.makeText(
+                    requireContext(),
+                    "Coming Soon",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -128,11 +167,13 @@ class LoginFragment : DialogFragment() {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-    private fun setUsername(){
+
+    private fun setUsername() {
         val username = arguments?.getString(USERNAME)
         if (username.isNullOrEmpty()) {
             binding.etUsername.hint = null
@@ -140,6 +181,7 @@ class LoginFragment : DialogFragment() {
             binding.etUsername.setText(username)
         }
     }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return object : Dialog(requireContext(), theme) {
             override fun onBackPressed() {
