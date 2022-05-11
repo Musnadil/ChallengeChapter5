@@ -1,9 +1,6 @@
 package com.musnadil.challengechapter5.fragment
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.musnadil.challengechapter5.R
+import com.musnadil.challengechapter5.UserManager
 import com.musnadil.challengechapter5.databinding.FragmentUpdateUserBinding
 import com.musnadil.challengechapter5.room.database.UserDatabase
 import com.musnadil.challengechapter5.room.entity.User
@@ -23,11 +21,14 @@ import kotlinx.coroutines.runBlocking
 
 class UpdateUserFragment : DialogFragment() {
     private var _binding: FragmentUpdateUserBinding? = null
-    private val binding get()= _binding!!
-    var myDb : UserDatabase? = null
-    private val args : UpdateUserFragmentArgs by navArgs()
+    private val binding get() = _binding!!
+    var myDb: UserDatabase? = null
+    private val args: UpdateUserFragmentArgs by navArgs()
     lateinit var homeViewModel: HomeViewModel
-    private lateinit var preferences: SharedPreferences
+
+    private lateinit var userManager: UserManager
+    var username = ""
+    var password = ""
 
 
     override fun onCreateView(
@@ -36,16 +37,17 @@ class UpdateUserFragment : DialogFragment() {
     ): View {
         dialog?.window?.setBackgroundDrawableResource(R.drawable.rounded_dialog)
         dialog?.window?.attributes?.windowAnimations = R.style.MyDialogAnimation
-        _binding = FragmentUpdateUserBinding.inflate(inflater,container,false)
+        _binding = FragmentUpdateUserBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         myDb = UserDatabase.getInstance(requireContext())
+        userManager = UserManager(requireContext())
+
         homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-        preferences = requireContext().getSharedPreferences(LoginFragment.SPUSER, Context.MODE_PRIVATE)
-        homeViewModel.userLoggedin.observe(viewLifecycleOwner){
+        homeViewModel.userLoggedin.observe(viewLifecycleOwner) {
             binding.etUsername.setText(it.username)
             binding.etEmail.setText(it.email)
             binding.etPassowrd.setText(it.password)
@@ -60,15 +62,20 @@ class UpdateUserFragment : DialogFragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 val result = myDb?.userDao()?.updateItem(user)
                 runBlocking(Dispatchers.Main) {
-                    if (result != 0){
-                        val editorSp : SharedPreferences.Editor = preferences.edit()
-                        editorSp.putString(LoginFragment.USERNAME,binding.etUsername.text.toString())
-                        editorSp.putString(LoginFragment.PASSWORD,binding.etPassowrd.text.toString())
-                        editorSp.apply()
+                    if (result != 0) {
+                        username = binding.etUsername.text.toString()
+                        password = binding.etPassowrd.text.toString()
+                        userManager.saveUserToPref(username,password)
+
                         homeViewModel.getUser(user)
-                        Toast.makeText(requireContext(), "User berhasil diupdate", Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(requireContext(), "User gagal diupdate", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "User berhasil diupdate",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(requireContext(), "User gagal diupdate", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }

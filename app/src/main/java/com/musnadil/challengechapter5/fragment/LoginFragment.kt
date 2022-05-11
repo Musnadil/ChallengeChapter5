@@ -2,7 +2,6 @@ package com.musnadil.challengechapter5.fragment
 
 import android.app.Dialog
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +12,8 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.musnadil.challengechapter5.R
@@ -20,10 +21,7 @@ import com.musnadil.challengechapter5.UserManager
 import com.musnadil.challengechapter5.activity.MainActivity
 import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
 import com.musnadil.challengechapter5.room.database.UserDatabase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class LoginFragment : DialogFragment() {
 
@@ -31,13 +29,13 @@ class LoginFragment : DialogFragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private lateinit var userManager: UserManager
-    var username = ""
-    var password = ""
+    var prefUsername = ""
+    var prefPassword = ""
 
     companion object {
-        const val SPUSER = "user_login"
+//        const val SPUSER = "user_login"
         const val USERNAME = "username"
-        const val PASSWORD = "password"
+//        const val PASSWORD = "password"
     }
 
     override fun onCreateView(
@@ -68,13 +66,11 @@ class LoginFragment : DialogFragment() {
 
         myDb = UserDatabase.getInstance(requireContext())
 
-        val preferences = this.activity?.getSharedPreferences(SPUSER, Context.MODE_PRIVATE)
-        if (preferences!!.getString(USERNAME, null) != null) {
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-            val username = preferences.getString(USERNAME, null)
-            Toast.makeText(context, "Selamat datang $username", Toast.LENGTH_SHORT).show()
+        userManager.usernameFlow.asLiveData().observe(viewLifecycleOwner){
+            if(it != UserManager.DEFAULT_USERNAME){
+                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            }
         }
-
         binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             dialog?.hide()
@@ -111,24 +107,23 @@ class LoginFragment : DialogFragment() {
                             binding.etPassowrd.text!!.clear()
                         }
                         snackbar.show()
-                    } else {
+                    }else {
                         if (binding.cbRemember.isChecked) {
-//                            val editorSp: SharedPreferences.Editor = preferences!!.edit()
-//                            editorSp.putString(USERNAME, binding.etUsername.text.toString())
-//                            editorSp.putString(PASSWORD, binding.etPassowrd.text.toString())
-//                            editorSp.apply()
+                            prefUsername = binding.etUsername.text.toString()
+                            prefPassword = binding.etPassowrd.text.toString()
+                            userManager.saveUserToPref(prefUsername, prefPassword)
                         }
-                        Toast.makeText(
-                            requireContext(),
-                            "Selamat datang ${binding.etUsername.text.toString()}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        val navigateHome =
-                            LoginFragmentDirections.actionLoginFragmentToHomeFragment(
-                                binding.etUsername.text.toString(),
-                                binding.etPassowrd.text.toString()
-                            )
-                        findNavController().navigate(navigateHome)
+                            Toast.makeText(
+                                requireContext(),
+                                "Selamat datang ${binding.etUsername.text.toString()}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            val navigateHome =
+                                LoginFragmentDirections.actionLoginFragmentToHomeFragment(
+                                    binding.etUsername.text.toString(),
+                                    binding.etPassowrd.text.toString()
+                                )
+                            findNavController().navigate(navigateHome)
                     }
                 }
             }

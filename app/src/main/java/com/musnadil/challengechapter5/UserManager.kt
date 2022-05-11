@@ -1,14 +1,14 @@
 package com.musnadil.challengechapter5
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.clear
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.createDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 
 class UserManager(context: Context) {
     companion object {
@@ -27,15 +27,37 @@ class UserManager(context: Context) {
             it[PASSWORD_KEY] = password
         }
     }
-    suspend fun deleteUserFromPref(){
+
+    suspend fun deleteUserFromPref() {
         dataStore.edit {
             it.clear()
         }
     }
-    val usernameFlow: Flow<String> = dataStore.data.map {
-        it[USERNAME_KEY] ?: DEFAULT_USERNAME
+
+    val usernameFlow: Flow<String> = dataStore.data
+        .catch {exception ->
+            if (exception is IOException){
+                Log.d("DataStore",exception.message.toString())
+                emit(emptyPreferences())
+            }else{
+                throw exception
+            }
+        }
+        .map { preference ->
+        val username = preference[USERNAME_KEY] ?: DEFAULT_USERNAME
+        username
     }
-    val passwordFlow: Flow<String> = dataStore.data.map {
-        it[PASSWORD_KEY] ?: DEFAULT_PASSWORD
+    val passwordFlow: Flow<String> = dataStore.data
+        .catch {exception ->
+            if (exception is IOException){
+                Log.d("DataStore",exception.message.toString())
+                emit(emptyPreferences())
+            }else{
+                throw exception
+            }
+        }
+        .map { preference ->
+        val password = preference[PASSWORD_KEY] ?: DEFAULT_PASSWORD
+        password
     }
 }
