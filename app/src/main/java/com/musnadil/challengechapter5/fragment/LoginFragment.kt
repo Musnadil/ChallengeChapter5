@@ -12,8 +12,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.musnadil.challengechapter5.R
@@ -21,6 +20,8 @@ import com.musnadil.challengechapter5.UserManager
 import com.musnadil.challengechapter5.activity.MainActivity
 import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
 import com.musnadil.challengechapter5.room.database.UserDatabase
+import com.musnadil.challengechapter5.viewmodel.HomeViewModel
+import com.musnadil.challengechapter5.viewmodel.ViewModelFactory
 import kotlinx.coroutines.*
 
 class LoginFragment : DialogFragment() {
@@ -29,13 +30,12 @@ class LoginFragment : DialogFragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private lateinit var userManager: UserManager
+    private lateinit var viewModel: HomeViewModel
     var prefUsername = ""
     var prefPassword = ""
 
     companion object {
-//        const val SPUSER = "user_login"
         const val USERNAME = "username"
-//        const val PASSWORD = "password"
     }
 
     override fun onCreateView(
@@ -63,14 +63,13 @@ class LoginFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setUsername()
         userManager = UserManager(requireContext())
+        viewModel =
+            ViewModelProvider(requireActivity(), ViewModelFactory(userManager))[HomeViewModel::class.java]
+        userLogin()
+        userManager = UserManager(requireContext())
 
         myDb = UserDatabase.getInstance(requireContext())
 
-        userManager.usernameFlow.asLiveData().observe(viewLifecycleOwner){
-            if(it != UserManager.DEFAULT_USERNAME){
-                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-            }
-        }
         binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             dialog?.hide()
@@ -90,12 +89,12 @@ class LoginFragment : DialogFragment() {
         binding.btnLogin.setOnClickListener {
             closeKeyboard()
             GlobalScope.async {
-                val result = myDb?.userDao()?.userCheck(
+                val result = myDb?.userDao()?.getUser(
                     binding.etUsername.text.toString(),
                     binding.etPassowrd.text.toString()
                 )
                 runBlocking(Dispatchers.Main) {
-                    if (result == false) {
+                    if (result == null) {
                         val snackbar = Snackbar.make(
                             it, "Gagal masuk mungkin anda salah memasukan email atau password",
                             Snackbar.LENGTH_INDEFINITE
@@ -108,11 +107,6 @@ class LoginFragment : DialogFragment() {
                         }
                         snackbar.show()
                     }else {
-                        if (binding.cbRemember.isChecked) {
-                            prefUsername = binding.etUsername.text.toString()
-                            prefPassword = binding.etPassowrd.text.toString()
-                            userManager.saveUserToPref(prefUsername, prefPassword)
-                        }
                             Toast.makeText(
                                 requireContext(),
                                 "Selamat datang ${binding.etUsername.text.toString()}",
@@ -124,6 +118,11 @@ class LoginFragment : DialogFragment() {
                                     binding.etPassowrd.text.toString()
                                 )
                             findNavController().navigate(navigateHome)
+                    }
+                }
+                if (result != null){
+                    if (binding.cbRemember.isChecked) {
+                        viewModel.setDataUser(result)
                     }
                 }
             }
@@ -150,6 +149,16 @@ class LoginFragment : DialogFragment() {
                     "Coming Soon",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        }
+    }
+
+    private fun userLogin() {
+        viewModel.apply {
+            getDataUser().observe(viewLifecycleOwner){
+                if (it.id != UserManager.DEFAULT_ID){
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                }
             }
         }
     }

@@ -47,7 +47,7 @@ class UpdateUserFragment : DialogFragment() {
         userManager = UserManager(requireContext())
 
         homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-        homeViewModel.userLoggedin.observe(viewLifecycleOwner) {
+        homeViewModel.getDataUser().observe(viewLifecycleOwner) {
             binding.etUsername.setText(it.username)
             binding.etEmail.setText(it.email)
             binding.etPassowrd.setText(it.password)
@@ -63,20 +63,18 @@ class UpdateUserFragment : DialogFragment() {
                 val result = myDb?.userDao()?.updateItem(user)
                 runBlocking(Dispatchers.Main) {
                     if (result != 0) {
-                        username = binding.etUsername.text.toString()
-                        password = binding.etPassowrd.text.toString()
-                        userManager.saveUserToPref(username,password)
-
-                        homeViewModel.getUser(user)
                         Toast.makeText(
-                            requireContext(),
-                            "User berhasil diupdate",
+                            requireContext(), "User berhasil diupdate",
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
                         Toast.makeText(requireContext(), "User gagal diupdate", Toast.LENGTH_SHORT)
                             .show()
                     }
+                }
+                if (result != 0) {
+                    homeViewModel.setDataUser(user)
+
                 }
             }
             dialog?.dismiss()

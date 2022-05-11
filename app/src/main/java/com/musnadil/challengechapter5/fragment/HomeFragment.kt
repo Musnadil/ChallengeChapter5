@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,7 +23,6 @@ import com.musnadil.challengechapter5.api.model.GetAllNews
 import com.musnadil.challengechapter5.api.service.ApiClient
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
 import com.musnadil.challengechapter5.room.database.UserDatabase
-import com.musnadil.challengechapter5.room.entity.User
 import com.musnadil.challengechapter5.viewmodel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,12 +35,10 @@ import retrofit2.Response
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    var myDb: UserDatabase? = null
+    private lateinit var pref: UserManager
     private val args: HomeFragmentArgs by navArgs()
     lateinit var homeViewModel: HomeViewModel
     private lateinit var userManager: UserManager
-    var prefUsername = UserManager.DEFAULT_USERNAME
-    var prefPassword = UserManager.DEFAULT_PASSWORD
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,14 +50,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pref = UserManager(requireActivity())
         homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         userManager = UserManager(requireActivity())
-        getUser()
         setPantun()
         logout()
         setCountry()
         updateUser()
-
+        homeViewModel.getDataUser().observe(viewLifecycleOwner){
+            binding.tvUsername.text = it.username
+        }
     }
 
     private fun fatchNews(country: String) {
@@ -151,8 +149,8 @@ class HomeFragment : Fragment() {
                 }
                 setPositiveButton("Ya") { dialog, which ->
                     dialog.dismiss()
-                    GlobalScope.launch {
-                        userManager.deleteUserFromPref()
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        pref.deleteUserFromPref()
                     }
                     findNavController().navigate(R.id.action_homeFragment_to_homeLoginFragment)
                 }
@@ -195,35 +193,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateUser() {
-        binding.btnUpdate.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_updateUserFragment)
-        }
-    }
-
-    private fun getUser() {
-        myDb = UserDatabase.getInstance(requireContext())
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            val data = myDb?.userDao()?.getUser(prefUsername, prefPassword)
-            runBlocking(Dispatchers.Main) {
-                if (data != null) {
-                    homeViewModel.getUser(data)
-                    val navigateUpdate =
-                        HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(data)
-                    binding.btnUpdate.setOnClickListener {
-                        findNavController().navigate(navigateUpdate)
-                    }
-                }
+        homeViewModel.getDataUser().observe(viewLifecycleOwner){
+            val navigateUpdate =
+                HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(it)
+            binding.btnUpdate.setOnClickListener {
+                findNavController().navigate(navigateUpdate)
             }
-        }
-        homeViewModel.readUsername.observe(viewLifecycleOwner){
-            prefUsername = it
-        }
-        homeViewModel.readPassword.observe(viewLifecycleOwner){
-            prefPassword = it
-        }
-        homeViewModel.userLoggedin.observe(viewLifecycleOwner) {
-            binding.tvUsername.text = prefUsername
         }
     }
 
