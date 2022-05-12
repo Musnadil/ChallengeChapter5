@@ -14,7 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.UserManager
 import com.musnadil.challengechapter5.adapter.NewsAdapter
@@ -22,12 +21,9 @@ import com.musnadil.challengechapter5.api.model.Article
 import com.musnadil.challengechapter5.api.model.GetAllNews
 import com.musnadil.challengechapter5.api.service.ApiClient
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
-import com.musnadil.challengechapter5.room.database.UserDatabase
 import com.musnadil.challengechapter5.viewmodel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +32,6 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var pref: UserManager
-    private val args: HomeFragmentArgs by navArgs()
     lateinit var homeViewModel: HomeViewModel
     private lateinit var userManager: UserManager
 
@@ -56,9 +51,12 @@ class HomeFragment : Fragment() {
         setPantun()
         logout()
         setCountry()
-        updateUser()
+        getUser()
         homeViewModel.getDataUser().observe(viewLifecycleOwner){
             binding.tvUsername.text = it.username
+        }
+        binding.tvPantun.setOnClickListener {
+            setPantun()
         }
     }
 
@@ -192,7 +190,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun updateUser() {
+    private fun getUser() {
         homeViewModel.getDataUser().observe(viewLifecycleOwner){
             val navigateUpdate =
                 HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(it)

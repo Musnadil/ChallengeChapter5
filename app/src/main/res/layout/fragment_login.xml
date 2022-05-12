@@ -68,17 +68,6 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/cb_remember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:buttonTint="@color/yellow"
-        android:checked="false"
-        app:layout_constraintStart_toStartOf="@id/password_container"
-        app:layout_constraintTop_toBottomOf="@id/password_container"
-        android:text="@string/remember_me"
-        style="@style/regular_style"/>
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_login"
         style="@style/regular_style"
@@ -91,7 +80,7 @@
         android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cb_remember"/>
+        app:layout_constraintTop_toBottomOf="@id/password_container"/>
 
     <View
         android:id="@+id/separator"

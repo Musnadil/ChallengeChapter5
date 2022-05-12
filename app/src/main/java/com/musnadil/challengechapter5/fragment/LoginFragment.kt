@@ -31,8 +31,6 @@ class LoginFragment : DialogFragment() {
     private val binding get() = _binding!!
     private lateinit var userManager: UserManager
     private lateinit var viewModel: HomeViewModel
-    var prefUsername = ""
-    var prefPassword = ""
 
     companion object {
         const val USERNAME = "username"
@@ -67,9 +65,7 @@ class LoginFragment : DialogFragment() {
             ViewModelProvider(requireActivity(), ViewModelFactory(userManager))[HomeViewModel::class.java]
         userLogin()
         userManager = UserManager(requireContext())
-
         myDb = UserDatabase.getInstance(requireContext())
-
         binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             dialog?.hide()
@@ -87,7 +83,6 @@ class LoginFragment : DialogFragment() {
         binding.etPassowrd.addTextChangedListener(textWatcher)
 
         binding.btnLogin.setOnClickListener {
-            closeKeyboard()
             GlobalScope.async {
                 val result = myDb?.userDao()?.getUser(
                     binding.etUsername.text.toString(),
@@ -105,6 +100,7 @@ class LoginFragment : DialogFragment() {
                             binding.etUsername.text!!.clear()
                             binding.etPassowrd.text!!.clear()
                         }
+                        closeKeyboard()
                         snackbar.show()
                     }else {
                             Toast.makeText(
@@ -121,9 +117,7 @@ class LoginFragment : DialogFragment() {
                     }
                 }
                 if (result != null){
-                    if (binding.cbRemember.isChecked) {
                         viewModel.setDataUser(result)
-                    }
                 }
             }
         }

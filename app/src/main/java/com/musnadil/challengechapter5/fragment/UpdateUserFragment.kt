@@ -27,9 +27,6 @@ class UpdateUserFragment : DialogFragment() {
     lateinit var homeViewModel: HomeViewModel
 
     private lateinit var userManager: UserManager
-    var username = ""
-    var password = ""
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
