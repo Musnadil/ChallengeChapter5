@@ -11,9 +11,9 @@ class UserManager(private val context: Context) {
     companion object {
         const val USERPREF = "USER_PREFS"
         private val ID_USER_KEY = intPreferencesKey("ID_USER_KEY")
-        val USERNAME_KEY = stringPreferencesKey("USERNAME_KEY")
+        private val USERNAME_KEY = stringPreferencesKey("USERNAME_KEY")
         private val EMAIL_KEY = stringPreferencesKey("EMAIL_KEY")
-        val PASSWORD_KEY = stringPreferencesKey("PASSWORD_KEY")
+        private val PASSWORD_KEY = stringPreferencesKey("PASSWORD_KEY")
         const val DEFAULT_ID = -1
         const val DEFAULT_USERNAME = "DEF_USERNAME"
         const val DEFAULT_EMAIL = "DEF_EMAIL"
@@ -21,7 +21,7 @@ class UserManager(private val context: Context) {
         val Context.dataStore by preferencesDataStore(UserManager.USERPREF)
     }
 
-    suspend fun setUser(user: User) {
+    suspend fun saveUserToPref(user: User) {
         context.dataStore.edit { preferences ->
             preferences[ID_USER_KEY] = user.id!!.toInt()
             preferences[USERNAME_KEY] = user.username
@@ -30,7 +30,7 @@ class UserManager(private val context: Context) {
         }
     }
 
-    fun getUser(): Flow<User> {
+    fun getUserFromPref(): Flow<User> {
         return context.dataStore.data.map { preferences ->
             User(
                 preferences[ID_USER_KEY] ?: DEFAULT_ID,

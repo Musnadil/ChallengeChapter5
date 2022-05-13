@@ -9,10 +9,10 @@ import com.musnadil.challengechapter5.room.entity.User
 class HomeViewModel(private val pref: UserManager) : ViewModel() {
 
     suspend fun setDataUser(user: User) {
-        pref.setUser(user)
+        pref.saveUserToPref(user)
     }
 
     fun getDataUser(): LiveData<User> {
-        return pref.getUser().asLiveData()
+        return pref.getUserFromPref().asLiveData()
     }
 }
