@@ -12,18 +12,15 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.UserManager
+import com.musnadil.challengechapter5.UserPreferences
 import com.musnadil.challengechapter5.adapter.NewsAdapter
-import com.musnadil.challengechapter5.api.model.Article
-import com.musnadil.challengechapter5.api.model.GetAllNews
-import com.musnadil.challengechapter5.api.service.ApiClient
+import com.musnadil.challengechapter5.data.api.model.Article
+import com.musnadil.challengechapter5.data.api.model.GetAllNews
+import com.musnadil.challengechapter5.data.api.service.ApiClient
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
 import com.musnadil.challengechapter5.viewmodel.HomeViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,9 +28,9 @@ import retrofit2.Response
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var pref: UserManager
-    lateinit var homeViewModel: HomeViewModel
-    private lateinit var userManager: UserManager
+    private lateinit var homeViewModel: HomeViewModel
+    private val arrayPantun = mutableListOf<String>()
+    private lateinit var adapter :NewsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,16 +42,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pref = UserManager(requireActivity())
         homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-        userManager = UserManager(requireActivity())
+        homeViewModel.getDataUser()
+        showList()
+        arrayPantun.addAll(listOf(getString(R.string.pantun_satu),
+            getString(R.string.pantun_dua),
+            getString(R.string.pantun_tiga)))
         setPantun()
         logout()
         setCountry()
         getUser()
-        homeViewModel.getDataUser().observe(viewLifecycleOwner){
-            binding.tvUsername.text = it.username
-        }
         binding.tvPantun.setOnClickListener {
             setPantun()
         }
@@ -69,7 +66,7 @@ class HomeFragment : Fragment() {
                     val code = response.code()
                     if (code == 200) {
                         if (body != null) {
-                            showList(body.articles)
+                            adapter.submitData(body.articles)
                         }
                     } else if (code == 400) {
                         Toast.makeText(
@@ -108,8 +105,8 @@ class HomeFragment : Fragment() {
             })
     }
 
-    private fun showList(data: List<Article>?) {
-        val adapter = NewsAdapter(object : NewsAdapter.OnClickListener {
+    private fun showList() {
+        adapter = NewsAdapter(object : NewsAdapter.OnClickListener {
             override fun onClickItem(data: Article) {
                 val bundle = Bundle().apply {
                     putString("img", data.urlToImage)
@@ -122,18 +119,13 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(R.id.action_homeFragment_to_detailNewsFragment, bundle)
             }
         })
-        adapter.submitData(data)
         binding.rvBerita.adapter = adapter
     }
 
     private fun setPantun() {
-        val arrayPantun = arrayOf(
-            getString(R.string.pantun_satu),
-            getString(R.string.pantun_dua),
-            getString(R.string.pantun_tiga)
-        )
         val pantun = arrayPantun.random()
         binding.tvPantun.text = pantun
+
     }
 
     private fun logout() {
@@ -147,9 +139,7 @@ class HomeFragment : Fragment() {
                 }
                 setPositiveButton("Ya") { dialog, which ->
                     dialog.dismiss()
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        pref.deleteUserFromPref()
-                    }
+                    homeViewModel.deleteUserPref()
                     findNavController().navigate(R.id.action_homeFragment_to_homeLoginFragment)
                 }
             }
@@ -191,7 +181,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun getUser() {
-        homeViewModel.getDataUser().observe(viewLifecycleOwner){
+        homeViewModel.user.observe(viewLifecycleOwner){
+            binding.tvUsername.text = it.username
             val navigateUpdate =
                 HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(it)
             binding.btnUpdate.setOnClickListener {

@@ -1,6 +1,6 @@
-package com.musnadil.challengechapter5.api.service
+package com.musnadil.challengechapter5.data.api.service
 
-import com.musnadil.challengechapter5.api.model.GetAllNews
+import com.musnadil.challengechapter5.data.api.model.GetAllNews
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

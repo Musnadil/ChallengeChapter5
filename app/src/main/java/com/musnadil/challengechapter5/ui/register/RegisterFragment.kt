@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.fragment
+package com.musnadil.challengechapter5.ui.register
 
 import android.app.Dialog
 import android.os.Bundle
@@ -10,18 +10,25 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.databinding.FragmentRegisterBinding
-import com.musnadil.challengechapter5.room.database.UserDatabase
-import com.musnadil.challengechapter5.room.entity.User
+import com.musnadil.challengechapter5.data.room.database.UserDatabase
+import com.musnadil.challengechapter5.data.room.entity.User
+import com.musnadil.challengechapter5.fragment.LoginFragment
 import kotlinx.coroutines.*
 
-@DelicateCoroutinesApi
 class RegisterFragment : DialogFragment() {
-    private var myDb: UserDatabase? = null
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
+    private val registerViewModel by viewModels<RegisterViewModel> {
+        RegisterViewModelFactory(
+            RegisterRepository(
+                UserDatabase.getInstance(requireContext()).userDao()
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,8 +53,7 @@ class RegisterFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //setup database
-        myDb = UserDatabase.getInstance(requireContext())
+        observeResult()
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
@@ -65,6 +71,7 @@ class RegisterFragment : DialogFragment() {
             override fun afterTextChanged(p0: Editable?) {
             }
         }
+
         binding.etUsername.addTextChangedListener(textWatcher)
         binding.etEmail.addTextChangedListener(textWatcher)
         binding.etPassowrd.addTextChangedListener(textWatcher)
@@ -72,9 +79,12 @@ class RegisterFragment : DialogFragment() {
 
         binding.btnSignIn.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-
             dialog?.hide()
         }
+        signUpListener()
+    }
+
+    private fun signUpListener() {
         binding.btnSignup.setOnClickListener {
             // disini bawa data username untuk login
             if (binding.etPassowrd.text.toString() != binding.etConfirmPassowrd.text.toString()) {
@@ -82,26 +92,34 @@ class RegisterFragment : DialogFragment() {
                 binding.etConfirmPassowrd.text?.clear()
                 binding.etConfirmPassowrd.requestFocus()
             } else {
-            val objectUser = User(
-                null,
-                binding.etUsername.text.toString(),
-                binding.etEmail.text.toString(),
-                binding.etPassowrd.text.toString()
-            )
-                GlobalScope.async {
-                    val result = myDb?.userDao()?.addUser(objectUser)
-                    runBlocking(Dispatchers.Main) {
-                        if (result !=0.toLong()){
-                            Toast.makeText(requireContext(), "Registration success", Toast.LENGTH_SHORT).show()
-                            val bunlde = Bundle().apply {
-                                putString(LoginFragment.USERNAME, binding.etUsername.text.toString())
-                            }
-                            findNavController().navigate(R.id.action_registerFragment_to_loginFragment,bunlde)
-                        }else{
-                            Toast.makeText(requireContext(), "Registration failed", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                val user = User(
+                    null,
+                    binding.etUsername.text.toString(),
+                    binding.etEmail.text.toString(),
+                    binding.etPassowrd.text.toString()
+                )
+                registerViewModel.register(user)
+            }
+        }
+    }
+
+    private fun observeResult() {
+        registerViewModel.result.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it != 0.toLong()) {
+                    Toast.makeText(requireContext(), "Registration success", Toast.LENGTH_SHORT)
+                        .show()
                     dialog?.hide()
+                    val bundle = Bundle().apply {
+                        putString(LoginFragment.USERNAME, binding.etUsername.text.toString())
+                    }
+                    findNavController().navigate(
+                        R.id.action_registerFragment_to_loginFragment,
+                        bundle
+                    )
+                } else {
+                    Toast.makeText(requireContext(), "Registration failed", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
@@ -111,6 +129,7 @@ class RegisterFragment : DialogFragment() {
         super.onDestroy()
         _binding = null
     }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return object : Dialog(requireContext(), theme) {
             override fun onBackPressed() {

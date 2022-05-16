@@ -22,7 +22,7 @@
     </dialog>
     <dialog
         android:id="@+id/registerFragment"
-        android:name="com.musnadil.challengechapter5.fragment.RegisterFragment"
+        android:name="com.musnadil.challengechapter5.ui.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -102,6 +102,6 @@
             app:destination="@id/homeFragment" />
         <argument
             android:name="user"
-            app:argType="com.musnadil.challengechapter5.room.entity.User" />
+            app:argType="com.musnadil.challengechapter5.data.room.entity.User" />
     </dialog>
 </navigation>

@@ -1,18 +1,35 @@
 package com.musnadil.challengechapter5.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import com.musnadil.challengechapter5.UserManager
-import com.musnadil.challengechapter5.room.entity.User
+import androidx.lifecycle.*
+import com.musnadil.challengechapter5.HomeRepository
+import com.musnadil.challengechapter5.UserPreferences
+import com.musnadil.challengechapter5.data.room.entity.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class HomeViewModel(private val pref: UserManager) : ViewModel() {
+class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
 
-    suspend fun setDataUser(user: User) {
-        pref.saveUserToPref(user)
+    private val _user : MutableLiveData<User> = MutableLiveData()
+    val user : LiveData<User> get() = _user
+
+    fun setDataUser(user: User) {
+        viewModelScope.launch {
+            repository.saveToPref(user)
+        }
     }
 
-    fun getDataUser(): LiveData<User> {
-        return pref.getUserFromPref().asLiveData()
+    fun getDataUser(){
+        viewModelScope.launch {
+            repository.getUserPref().collect {
+                _user.value = it
+            }
+        }
+    }
+
+    fun deleteUserPref(){
+        viewModelScope.launch{
+            repository.deletePref()
+        }
     }
 }

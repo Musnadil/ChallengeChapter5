@@ -15,11 +15,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.musnadil.challengechapter5.HomeRepository
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.UserManager
-import com.musnadil.challengechapter5.activity.MainActivity
+import com.musnadil.challengechapter5.UserPreferences
+import com.musnadil.challengechapter5.ui.MainActivity
 import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
-import com.musnadil.challengechapter5.room.database.UserDatabase
+import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.viewmodel.HomeViewModel
 import com.musnadil.challengechapter5.viewmodel.ViewModelFactory
 import kotlinx.coroutines.*
@@ -29,8 +30,9 @@ class LoginFragment : DialogFragment() {
     private var myDb: UserDatabase? = null
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var userManager: UserManager
+    private lateinit var userPreferences: UserPreferences
     private lateinit var viewModel: HomeViewModel
+    private lateinit var repository: HomeRepository
 
     companion object {
         const val USERNAME = "username"
@@ -60,11 +62,14 @@ class LoginFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUsername()
-        userManager = UserManager(requireContext())
+        userPreferences = UserPreferences(requireContext())
+        repository = HomeRepository(userPreferences)
         viewModel =
-            ViewModelProvider(requireActivity(), ViewModelFactory(userManager))[HomeViewModel::class.java]
+            ViewModelProvider(
+                requireActivity(),
+                ViewModelFactory(repository)
+            )[HomeViewModel::class.java]
         userLogin()
-        userManager = UserManager(requireContext())
         myDb = UserDatabase.getInstance(requireContext())
         binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -102,22 +107,22 @@ class LoginFragment : DialogFragment() {
                         }
                         closeKeyboard()
                         snackbar.show()
-                    }else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Selamat datang ${binding.etUsername.text.toString()}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            val navigateHome =
-                                LoginFragmentDirections.actionLoginFragmentToHomeFragment(
-                                    binding.etUsername.text.toString(),
-                                    binding.etPassowrd.text.toString()
-                                )
-                            findNavController().navigate(navigateHome)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Selamat datang ${binding.etUsername.text.toString()}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        val navigateHome =
+                            LoginFragmentDirections.actionLoginFragmentToHomeFragment(
+                                binding.etUsername.text.toString(),
+                                binding.etPassowrd.text.toString()
+                            )
+                        findNavController().navigate(navigateHome)
                     }
                 }
-                if (result != null){
-                        viewModel.setDataUser(result)
+                if (result != null) {
+                    viewModel.setDataUser(result)
                 }
             }
         }
@@ -148,9 +153,10 @@ class LoginFragment : DialogFragment() {
     }
 
     private fun userLogin() {
-        viewModel.apply {
-            getDataUser().observe(viewLifecycleOwner){
-                if (it.id != UserManager.DEFAULT_ID){
+        viewModel.getDataUser()
+        viewModel.user.observe(viewLifecycleOwner) {
+            if (it.id != UserPreferences.DEFAULT_ID) {
+                if (findNavController().currentDestination?.id == R.id.loginFragment){
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
             }

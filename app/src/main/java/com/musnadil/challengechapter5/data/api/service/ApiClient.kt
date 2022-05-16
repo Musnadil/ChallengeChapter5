@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.api.service
+package com.musnadil.challengechapter5.data.api.service
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

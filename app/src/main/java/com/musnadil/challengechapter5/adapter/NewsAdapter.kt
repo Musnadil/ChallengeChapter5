@@ -6,14 +6,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.musnadil.challengechapter5.api.model.GetAllNews
 import com.musnadil.challengechapter5.databinding.ItemBeritaBinding
-import android.R
 
-import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
-import com.bumptech.glide.request.target.Target
-import com.musnadil.challengechapter5.api.model.Article
+import com.musnadil.challengechapter5.data.api.model.Article
 
 
 class NewsAdapter(private val onItemClick: OnClickListener) :

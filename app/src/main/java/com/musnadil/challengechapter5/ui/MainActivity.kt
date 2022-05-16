@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.activity
+package com.musnadil.challengechapter5.ui
 
 import android.graphics.Color
 import android.os.Build

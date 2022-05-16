@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.room.entity
+package com.musnadil.challengechapter5.data.room.entity
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

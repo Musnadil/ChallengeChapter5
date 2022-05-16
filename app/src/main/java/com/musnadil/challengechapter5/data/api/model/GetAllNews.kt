@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.api.model
+package com.musnadil.challengechapter5.data.api.model
 
 
 import com.google.gson.annotations.SerializedName

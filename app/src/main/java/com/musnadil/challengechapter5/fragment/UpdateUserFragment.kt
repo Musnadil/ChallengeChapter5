@@ -16,10 +16,10 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.UserManager
+import com.musnadil.challengechapter5.UserPreferences
 import com.musnadil.challengechapter5.databinding.FragmentUpdateUserBinding
-import com.musnadil.challengechapter5.room.database.UserDatabase
-import com.musnadil.challengechapter5.room.entity.User
+import com.musnadil.challengechapter5.data.room.database.UserDatabase
+import com.musnadil.challengechapter5.data.room.entity.User
 import com.musnadil.challengechapter5.viewmodel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +33,7 @@ class UpdateUserFragment : DialogFragment() {
     private val args: UpdateUserFragmentArgs by navArgs()
     lateinit var homeViewModel: HomeViewModel
 
-    private lateinit var userManager: UserManager
+    private lateinit var userPreferences: UserPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,10 +48,11 @@ class UpdateUserFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         myDb = UserDatabase.getInstance(requireContext())
-        userManager = UserManager(requireContext())
+        userPreferences = UserPreferences(requireContext())
 
         homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-        homeViewModel.getDataUser().observe(viewLifecycleOwner) {
+        homeViewModel.getDataUser()
+        homeViewModel.user.observe(viewLifecycleOwner) {
             binding.etUsername.setText(it.username)
             binding.etEmail.setText(it.email)
             binding.etPassowrd.setText(it.password)

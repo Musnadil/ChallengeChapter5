@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChallengeChapter5">
         <activity
-            android:name=".activity.SplashScreen"
+            android:name=".ui.SplashScreenActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="false"/>
     </application>
 
