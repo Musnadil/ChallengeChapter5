@@ -154,10 +154,8 @@ class LoginFragment : DialogFragment() {
     private fun userLogin() {
         authViewModel.getDataUser()
         authViewModel.user.observe(viewLifecycleOwner) {
-            if (it.id != UserPreferences.DEFAULT_ID) {
-                if (findNavController().currentDestination?.id == R.id.loginFragment) {
+            if (it.id != UserPreferences.DEFAULT_ID && findNavController().currentDestination?.id == R.id.loginFragment) {
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-                }
             }
         }
     }

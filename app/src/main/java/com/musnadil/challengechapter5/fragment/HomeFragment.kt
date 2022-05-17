@@ -151,7 +151,11 @@ class HomeFragment : Fragment() {
                 setPositiveButton("Ya") { dialog, which ->
                     dialog.dismiss()
                     homeViewModel.deleteUserPref()
-                    findNavController().navigate(R.id.action_homeFragment_to_homeLoginFragment)
+                    homeViewModel.user.observe(viewLifecycleOwner){
+                        if (it.id == UserPreferences.DEFAULT_ID && findNavController().currentDestination?.id == R.id.homeFragment){
+                            findNavController().navigate(R.id.action_homeFragment_to_homeLoginFragment)
+                        }
+                    }
                 }
             }
             dialogKonfirmasi.show()
