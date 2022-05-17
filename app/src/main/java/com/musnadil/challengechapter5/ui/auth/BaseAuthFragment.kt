@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.fragment
+package com.musnadil.challengechapter5.ui.auth
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +8,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.databinding.FragmentHomeLoginBinding
-import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
 
-class HomeLoginFragment : Fragment() {
+class BaseAuthFragment : Fragment() {
     private var _binding: FragmentHomeLoginBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(

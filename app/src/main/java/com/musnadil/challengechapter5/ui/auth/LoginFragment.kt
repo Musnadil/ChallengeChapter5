@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.fragment
+package com.musnadil.challengechapter5.ui.auth
 
 import android.app.Dialog
 import android.content.Context
@@ -15,15 +15,15 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.musnadil.challengechapter5.HomeRepository
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.UserPreferences
-import com.musnadil.challengechapter5.ui.MainActivity
-import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
-import com.musnadil.challengechapter5.viewmodel.HomeViewModel
-import com.musnadil.challengechapter5.viewmodel.ViewModelFactory
-import kotlinx.coroutines.*
+import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
+import com.musnadil.challengechapter5.ui.MainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 class LoginFragment : DialogFragment() {
 
@@ -31,8 +31,8 @@ class LoginFragment : DialogFragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private lateinit var userPreferences: UserPreferences
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var repository: HomeRepository
+    private lateinit var authViewModel: AuthViewModel
+    private lateinit var repository: AuthRepository
 
     companion object {
         const val USERNAME = "username"
@@ -62,15 +62,12 @@ class LoginFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUsername()
-        userPreferences = UserPreferences(requireContext())
-        repository = HomeRepository(userPreferences)
-        viewModel =
-            ViewModelProvider(
-                requireActivity(),
-                ViewModelFactory(repository)
-            )[HomeViewModel::class.java]
-        userLogin()
         myDb = UserDatabase.getInstance(requireContext())
+        userPreferences = UserPreferences(requireContext())
+        repository = AuthRepository(UserDatabase.getInstance(requireContext()).userDao(),userPreferences)
+        authViewModel =ViewModelProvider(requireActivity(),AuthViewModelFactory(repository))[AuthViewModel::class.java]
+        userLogin()
+        setupLogo()
         binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             dialog?.hide()
@@ -122,11 +119,13 @@ class LoginFragment : DialogFragment() {
                     }
                 }
                 if (result != null) {
-                    viewModel.setDataUser(result)
+                    authViewModel.setDataUser(result)
                 }
             }
         }
+    }
 
+    private fun setupLogo() {
         with(binding) {
             icGoogle.setOnClickListener {
                 Toast.makeText(
@@ -153,10 +152,10 @@ class LoginFragment : DialogFragment() {
     }
 
     private fun userLogin() {
-        viewModel.getDataUser()
-        viewModel.user.observe(viewLifecycleOwner) {
+        authViewModel.getDataUser()
+        authViewModel.user.observe(viewLifecycleOwner) {
             if (it.id != UserPreferences.DEFAULT_ID) {
-                if (findNavController().currentDestination?.id == R.id.loginFragment){
+                if (findNavController().currentDestination?.id == R.id.loginFragment) {
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
             }

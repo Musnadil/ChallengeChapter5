@@ -13,14 +13,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.musnadil.challengechapter5.HomeRepository
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.UserPreferences
 import com.musnadil.challengechapter5.adapter.NewsAdapter
 import com.musnadil.challengechapter5.data.api.model.Article
 import com.musnadil.challengechapter5.data.api.model.GetAllNews
 import com.musnadil.challengechapter5.data.api.service.ApiClient
+import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
+import com.musnadil.challengechapter5.ui.auth.AuthRepository
 import com.musnadil.challengechapter5.viewmodel.HomeViewModel
+import com.musnadil.challengechapter5.viewmodel.ViewModelFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +35,10 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private val arrayPantun = mutableListOf<String>()
     private lateinit var adapter :NewsAdapter
+    private lateinit var repository: HomeRepository
+    private lateinit var userPreferences: UserPreferences
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +50,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+        userPreferences = UserPreferences(requireContext())
+        repository = HomeRepository(userPreferences)
+        homeViewModel = ViewModelProvider(requireActivity(),ViewModelFactory(repository))[HomeViewModel::class.java]
         homeViewModel.getDataUser()
         showList()
         arrayPantun.addAll(listOf(getString(R.string.pantun_satu),
@@ -66,6 +76,7 @@ class HomeFragment : Fragment() {
                     val code = response.code()
                     if (code == 200) {
                         if (body != null) {
+                            binding.pbLoading.visibility = View.GONE
                             adapter.submitData(body.articles)
                         }
                     } else if (code == 400) {

@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.ui.register
+package com.musnadil.challengechapter5.ui.auth
 
 import android.app.Dialog
 import android.os.Bundle
@@ -13,19 +13,19 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
+import com.musnadil.challengechapter5.UserPreferences
 import com.musnadil.challengechapter5.databinding.FragmentRegisterBinding
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.data.room.entity.User
-import com.musnadil.challengechapter5.fragment.LoginFragment
-import kotlinx.coroutines.*
 
 class RegisterFragment : DialogFragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val registerViewModel by viewModels<RegisterViewModel> {
-        RegisterViewModelFactory(
-            RegisterRepository(
-                UserDatabase.getInstance(requireContext()).userDao()
+    private val userPreferences = UserPreferences(requireContext())
+    private val registerViewModel by viewModels<AuthViewModel> {
+        AuthViewModelFactory(
+            AuthRepository(
+                UserDatabase.getInstance(requireContext()).userDao(),userPreferences
             )
         )
     }
