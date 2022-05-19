@@ -3,8 +3,6 @@ package com.musnadil.challengechapter5.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.musnadil.challengechapter5.HomeRepository
-import com.musnadil.challengechapter5.UserPreferences
-import java.lang.IllegalArgumentException
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(private val repository: HomeRepository) : ViewModelProvider.NewInstanceFactory(){

@@ -7,13 +7,17 @@ import kotlinx.coroutines.flow.Flow
 
 class AuthRepository(private val userDao: UserDao, private val userPreferences: UserPreferences){
 
-    suspend fun register(user:User):Long = userDao.addUser(user)
+    suspend fun saveToPref(user: User){
+        userPreferences.saveUserToPref(user)
+    }
 
     fun getUserPref(): Flow<User> {
         return userPreferences.getUserFromPref()
     }
 
-    suspend fun saveToPref(user: User){
-        userPreferences.saveUserToPref(user)
+    suspend fun register(user:User):Long = userDao.addUser(user)
+
+    suspend fun login(username:String, password:String ):User{
+        return userDao.getUser(username, password)
     }
 }

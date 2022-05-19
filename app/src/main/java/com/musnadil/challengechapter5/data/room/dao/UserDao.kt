@@ -6,12 +6,15 @@ import com.musnadil.challengechapter5.data.room.entity.User
 @Dao
 interface UserDao {
 
+    //login
     @Query("SELECT * FROM User WHERE username like :username and password like :password")
-    fun getUser(username: String, password: String):User
+    suspend fun getUser(username: String, password: String):User
 
+    //register
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUser(user: User): Long
 
+    //update
     @Update
     fun updateItem(user: User):Int
 }

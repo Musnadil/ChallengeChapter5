@@ -10,15 +10,25 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val repository: AuthRepository):ViewModel() {
-    private val  _result : MutableLiveData<Long> = MutableLiveData()
-    val result : LiveData<Long> get() = _result
+    private val  _resultRegister : MutableLiveData<Long> = MutableLiveData()
+    val resultRegister : LiveData<Long> get() = _resultRegister
+
+    private val  _resultLogin : MutableLiveData<User> = MutableLiveData()
+    val resultLogin : LiveData<User> get() = _resultLogin
 
     private val _user : MutableLiveData<User> = MutableLiveData()
     val user : LiveData<User> get() = _user
 
+
+    fun login(username:String, password:String){
+        viewModelScope.launch {
+            _resultLogin.value = repository.login(username, password)
+        }
+    }
+
     fun register(user: User){
         viewModelScope.launch {
-            _result.value = repository.register(user)
+            _resultRegister.value = repository.register(user)
         }
     }
     fun getDataUser(){

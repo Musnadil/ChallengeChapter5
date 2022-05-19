@@ -104,7 +104,7 @@ class RegisterFragment : DialogFragment() {
     }
 
     private fun observeResult() {
-        registerViewModel.result.observe(viewLifecycleOwner) {
+        registerViewModel.resultRegister.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it != 0.toLong()) {
                     Toast.makeText(requireContext(), "Registration success", Toast.LENGTH_SHORT)

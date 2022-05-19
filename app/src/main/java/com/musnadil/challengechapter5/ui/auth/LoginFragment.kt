@@ -85,42 +85,80 @@ class LoginFragment : DialogFragment() {
         binding.etPassowrd.addTextChangedListener(textWatcher)
 
         binding.btnLogin.setOnClickListener {
-            GlobalScope.async {
-                val result = myDb?.userDao()?.getUser(
-                    binding.etUsername.text.toString(),
-                    binding.etPassowrd.text.toString()
+            authViewModel.login(
+                binding.etUsername.text.toString(),
+                binding.etPassowrd.text.toString())
+            loginCheck()
+//            GlobalScope.async {
+//                val result = myDb?.userDao()?.getUser(
+//                    binding.etUsername.text.toString(),
+//                    binding.etPassowrd.text.toString()
+//                )
+//                runBlocking(Dispatchers.Main) {
+//                    if (result == null) {
+//                        val snackbar = Snackbar.make(
+//                            it, "Gagal masuk mungkin anda salah memasukan email atau password",
+//                            Snackbar.LENGTH_INDEFINITE
+//                        )
+//                        snackbar.setAction("Oke") {
+//                            snackbar.dismiss()
+//                            binding.etUsername.requestFocus()
+//                            binding.etUsername.text!!.clear()
+//                            binding.etPassowrd.text!!.clear()
+//                        }
+//                        closeKeyboard()
+//                        snackbar.show()
+//                    } else {
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "Selamat datang ${binding.etUsername.text.toString()}",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                        val navigateHome =
+//                            LoginFragmentDirections.actionLoginFragmentToHomeFragment(
+//                                binding.etUsername.text.toString(),
+//                                binding.etPassowrd.text.toString()
+//                            )
+//                        findNavController().navigate(navigateHome)
+//                    }
+//                }
+//                if (result != null) {
+//                    authViewModel.setDataUser(result)
+//                }
+//            }
+        }
+    }
+
+    private fun loginCheck() {
+        authViewModel.resultLogin.observe(viewLifecycleOwner){ user->
+            if (user==null){
+                val snackbar = Snackbar.make(
+                    binding.root, "Gagal masuk mungkin anda salah memasukan email atau password",
+                    Snackbar.LENGTH_INDEFINITE
                 )
-                runBlocking(Dispatchers.Main) {
-                    if (result == null) {
-                        val snackbar = Snackbar.make(
-                            it, "Gagal masuk mungkin anda salah memasukan email atau password",
-                            Snackbar.LENGTH_INDEFINITE
-                        )
-                        snackbar.setAction("Oke") {
-                            snackbar.dismiss()
-                            binding.etUsername.requestFocus()
-                            binding.etUsername.text!!.clear()
-                            binding.etPassowrd.text!!.clear()
-                        }
-                        closeKeyboard()
-                        snackbar.show()
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Selamat datang ${binding.etUsername.text.toString()}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        val navigateHome =
-                            LoginFragmentDirections.actionLoginFragmentToHomeFragment(
-                                binding.etUsername.text.toString(),
-                                binding.etPassowrd.text.toString()
-                            )
-                        findNavController().navigate(navigateHome)
-                    }
+                snackbar.setAction("Oke") {
+                    snackbar.dismiss()
+                    binding.etUsername.requestFocus()
+                    binding.etUsername.text!!.clear()
+                    binding.etPassowrd.text!!.clear()
                 }
-                if (result != null) {
-                    authViewModel.setDataUser(result)
-                }
+                closeKeyboard()
+                snackbar.show()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Selamat datang ${binding.etUsername.text.toString()}",
+                    Toast.LENGTH_LONG
+                ).show()
+                val navigateHome =
+                    LoginFragmentDirections.actionLoginFragmentToHomeFragment(
+                        binding.etUsername.text.toString(),
+                        binding.etPassowrd.text.toString()
+                    )
+                findNavController().navigate(navigateHome)
+            }
+            if (user != null) {
+                authViewModel.setDataUser(user)
             }
         }
     }
