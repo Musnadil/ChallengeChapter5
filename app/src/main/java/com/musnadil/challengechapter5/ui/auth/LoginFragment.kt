@@ -89,43 +89,6 @@ class LoginFragment : DialogFragment() {
                 binding.etUsername.text.toString(),
                 binding.etPassowrd.text.toString())
             loginCheck()
-//            GlobalScope.async {
-//                val result = myDb?.userDao()?.getUser(
-//                    binding.etUsername.text.toString(),
-//                    binding.etPassowrd.text.toString()
-//                )
-//                runBlocking(Dispatchers.Main) {
-//                    if (result == null) {
-//                        val snackbar = Snackbar.make(
-//                            it, "Gagal masuk mungkin anda salah memasukan email atau password",
-//                            Snackbar.LENGTH_INDEFINITE
-//                        )
-//                        snackbar.setAction("Oke") {
-//                            snackbar.dismiss()
-//                            binding.etUsername.requestFocus()
-//                            binding.etUsername.text!!.clear()
-//                            binding.etPassowrd.text!!.clear()
-//                        }
-//                        closeKeyboard()
-//                        snackbar.show()
-//                    } else {
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "Selamat datang ${binding.etUsername.text.toString()}",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                        val navigateHome =
-//                            LoginFragmentDirections.actionLoginFragmentToHomeFragment(
-//                                binding.etUsername.text.toString(),
-//                                binding.etPassowrd.text.toString()
-//                            )
-//                        findNavController().navigate(navigateHome)
-//                    }
-//                }
-//                if (result != null) {
-//                    authViewModel.setDataUser(result)
-//                }
-//            }
         }
     }
 
