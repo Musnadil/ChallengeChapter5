@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
 
     private fun fatchNews(country: String) {
         val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
-        ApiClient.instance.getAllNews(country, apiKey = apiKey).enqueue(
+        ApiClient.getInstance(requireContext()).getAllNews(country, apiKey).enqueue(
             object : Callback<GetAllNews> {
                 override fun onResponse(call: Call<GetAllNews>, response: Response<GetAllNews>) {
                     val body = response.body()

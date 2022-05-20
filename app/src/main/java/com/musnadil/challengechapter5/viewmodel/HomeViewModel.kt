@@ -1,10 +1,11 @@
 package com.musnadil.challengechapter5.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.musnadil.challengechapter5.HomeRepository
-import com.musnadil.challengechapter5.UserPreferences
 import com.musnadil.challengechapter5.data.room.entity.User
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
