@@ -1,11 +1,9 @@
-package com.musnadil.challengechapter5.viewmodel
+package com.musnadil.challengechapter5.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.musnadil.challengechapter5.HomeRepository
-
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory(private val repository: HomeRepository) : ViewModelProvider.NewInstanceFactory(){
+class HomeViewModelFactory(private val repository: HomeRepository) : ViewModelProvider.NewInstanceFactory(){
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomeViewModel::class.java)){
             return HomeViewModel(repository) as T

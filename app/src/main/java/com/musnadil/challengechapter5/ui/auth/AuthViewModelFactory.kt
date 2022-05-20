@@ -2,6 +2,7 @@ package com.musnadil.challengechapter5.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.musnadil.challengechapter5.ui.home.HomeViewModel
 
 class AuthViewModelFactory(private val repository: AuthRepository) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -9,6 +10,10 @@ class AuthViewModelFactory(private val repository: AuthRepository) : ViewModelPr
             @Suppress("UNCHECKED_CAST")
             return AuthViewModel(repository) as T
         }
+//        else if (modelClass.isAssignableFrom(HomeViewModel::class.java)){
+//            @Suppress("UNCHECKED_CAST")
+//            return AuthViewModel(repository) as T
+//        }
         throw IllegalArgumentException("Unknown ViewModel Class"+modelClass.name)
     }
 

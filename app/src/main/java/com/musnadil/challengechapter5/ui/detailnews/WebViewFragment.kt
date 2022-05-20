@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.fragment
+package com.musnadil.challengechapter5.ui.detailnews
 
 import android.os.Bundle
 import android.view.LayoutInflater

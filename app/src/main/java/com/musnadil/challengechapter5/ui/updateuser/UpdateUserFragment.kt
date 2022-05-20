@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.fragment
+package com.musnadil.challengechapter5.ui.updateuser
 
 import android.app.Activity
 import android.net.Uri
@@ -16,11 +16,11 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.UserPreferences
+import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.databinding.FragmentUpdateUserBinding
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.data.room.entity.User
-import com.musnadil.challengechapter5.viewmodel.HomeViewModel
+import com.musnadil.challengechapter5.ui.home.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

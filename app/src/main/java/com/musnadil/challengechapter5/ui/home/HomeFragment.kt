@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.fragment
+package com.musnadil.challengechapter5.ui.home
 
 
 import android.os.Bundle
@@ -13,18 +13,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.musnadil.challengechapter5.HomeRepository
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.UserPreferences
+import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.adapter.NewsAdapter
 import com.musnadil.challengechapter5.data.api.model.Article
 import com.musnadil.challengechapter5.data.api.model.GetAllNews
 import com.musnadil.challengechapter5.data.api.service.ApiClient
-import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
-import com.musnadil.challengechapter5.ui.auth.AuthRepository
-import com.musnadil.challengechapter5.viewmodel.HomeViewModel
-import com.musnadil.challengechapter5.viewmodel.ViewModelFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,7 +47,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         userPreferences = UserPreferences(requireContext())
         repository = HomeRepository(userPreferences)
-        homeViewModel = ViewModelProvider(requireActivity(),ViewModelFactory(repository))[HomeViewModel::class.java]
+        homeViewModel = ViewModelProvider(requireActivity(),
+            HomeViewModelFactory(repository)
+        )[HomeViewModel::class.java]
         homeViewModel.getDataUser()
         showList()
         arrayPantun.addAll(listOf(getString(R.string.pantun_satu),
@@ -153,6 +150,8 @@ class HomeFragment : Fragment() {
                     homeViewModel.deleteUserPref()
                     homeViewModel.user.observe(viewLifecycleOwner){
                         if (it.id == UserPreferences.DEFAULT_ID && findNavController().currentDestination?.id == R.id.homeFragment){
+                            binding.btnUpdate.visibility = View.GONE
+                            binding.tvUsername.visibility = View.GONE
                             findNavController().navigate(R.id.action_homeFragment_to_homeLoginFragment)
                         }
                     }

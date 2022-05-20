@@ -16,14 +16,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.UserPreferences
+import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
 import com.musnadil.challengechapter5.ui.MainActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 
 class LoginFragment : DialogFragment() {
 
@@ -118,7 +114,9 @@ class LoginFragment : DialogFragment() {
                         binding.etUsername.text.toString(),
                         binding.etPassowrd.text.toString()
                     )
-                findNavController().navigate(navigateHome)
+                if (findNavController().currentDestination?.id == R.id.loginFragment){
+                    findNavController().navigate(navigateHome)
+                }
             }
             if (user != null) {
                 authViewModel.setDataUser(user)

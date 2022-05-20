@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.musnadil.challengechapter5.fragment.HomeFragment"
+        android:name="com.musnadil.challengechapter5.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -71,7 +71,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailNewsFragment"
-        android:name="com.musnadil.challengechapter5.fragment.DetailNewsFragment"
+        android:name="com.musnadil.challengechapter5.ui.detailnews.DetailNewsFragment"
         android:label="fragment_detail_news"
         tools:layout="@layout/fragment_detail_news" >
         <action
@@ -89,12 +89,12 @@
     </fragment>
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.musnadil.challengechapter5.fragment.WebViewFragment"
+        android:name="com.musnadil.challengechapter5.ui.detailnews.WebViewFragment"
         android:label="fragment_web_view"
         tools:layout="@layout/fragment_web_view" />
     <dialog
         android:id="@+id/updateUserFragment"
-        android:name="com.musnadil.challengechapter5.fragment.UpdateUserFragment"
+        android:name="com.musnadil.challengechapter5.ui.updateuser.UpdateUserFragment"
         android:label="fragment_update_user"
         tools:layout="@layout/fragment_update_user" >
         <action

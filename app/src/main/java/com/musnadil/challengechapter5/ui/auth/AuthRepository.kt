@@ -1,6 +1,6 @@
 package com.musnadil.challengechapter5.ui.auth
 
-import com.musnadil.challengechapter5.UserPreferences
+import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.data.room.dao.UserDao
 import com.musnadil.challengechapter5.data.room.entity.User
 import kotlinx.coroutines.flow.Flow

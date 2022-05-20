@@ -13,7 +13,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.UserPreferences
+import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.databinding.FragmentRegisterBinding
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.data.room.entity.User
