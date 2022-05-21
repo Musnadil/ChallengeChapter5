@@ -2,7 +2,6 @@ package com.musnadil.challengechapter5.ui.home
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,26 +17,20 @@ import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.adapter.NewsAdapter
 import com.musnadil.challengechapter5.data.Repository
 import com.musnadil.challengechapter5.data.api.model.Article
-import com.musnadil.challengechapter5.data.api.model.GetAllNews
-import com.musnadil.challengechapter5.data.api.service.ApiClient
-import com.musnadil.challengechapter5.data.room.dao.UserDao
+import com.musnadil.challengechapter5.data.api.ApiClient
+import com.musnadil.challengechapter5.data.api.Status
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
 import com.musnadil.challengechapter5.ui.ViewModelFactory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var homeViewModel: HomeViewModel
     private val arrayPantun = mutableListOf<String>()
-    private lateinit var adapter :NewsAdapter
+    private lateinit var adapter: NewsAdapter
     private lateinit var repository: Repository
     private lateinit var userPreferences: UserPreferences
-    private lateinit var userDao : UserDao
-
 
 
     override fun onCreateView(
@@ -51,15 +44,24 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         userPreferences = UserPreferences(requireContext())
-        repository = Repository(UserDatabase.getInstance(requireContext()).userDao(),userPreferences)
-        homeViewModel = ViewModelProvider(requireActivity(),
+        repository = Repository(
+            ApiClient.getInstance(requireContext()),
+            UserDatabase.getInstance(requireContext()).userDao(),
+            userPreferences
+        )
+        homeViewModel = ViewModelProvider(
+            requireActivity(),
             ViewModelFactory(repository)
         )[HomeViewModel::class.java]
         homeViewModel.getDataUser()
-        showList()
-        arrayPantun.addAll(listOf(getString(R.string.pantun_satu),
-            getString(R.string.pantun_dua),
-            getString(R.string.pantun_tiga)))
+        detailNews()
+        arrayPantun.addAll(
+            listOf(
+                getString(R.string.pantun_satu),
+                getString(R.string.pantun_dua),
+                getString(R.string.pantun_tiga)
+            )
+        )
         setPantun()
         logout()
         setCountry()
@@ -71,54 +73,93 @@ class HomeFragment : Fragment() {
 
     private fun fatchNews(country: String) {
         val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
-        ApiClient.getInstance(requireContext()).getAllNews(country, apiKey).enqueue(
-            object : Callback<GetAllNews> {
-                override fun onResponse(call: Call<GetAllNews>, response: Response<GetAllNews>) {
-                    val body = response.body()
-                    val code = response.code()
-                    if (code == 200) {
-                        if (body != null) {
+        homeViewModel.news.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.LOADING -> {
+                    binding.pbLoading.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    when (it.data?.code()) {
+                        200 -> if (it.data?.body() != null) {
                             binding.pbLoading.visibility = View.GONE
-                            adapter.submitData(body.articles)
+                            adapter.submitData(it.data?.body()!!.articles)
                         }
-                    } else if (code == 400) {
-                        Toast.makeText(
-                            requireContext(),
-                            "The request was unacceptable.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else if (code == 401) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Your API key was missing from the request, or wasn't correct.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else if (code == 429) {
-                        Toast.makeText(
-                            requireContext(),
-                            "You made too many requests",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else if (code == 500) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Something went wrong on our side.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(requireContext(), "Server sedang sibuk", Toast.LENGTH_SHORT)
-                            .show()
+                        400 -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "Your API key was missing from the request, or wasn't correct.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        429 -> {
+                            Toast.makeText(
+                    requireContext(),
+                                "You made too many requests",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        500 -> {
+                            Toast.makeText(
+                    requireContext(),
+                                "Something went wrong on our side.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
-
-                override fun onFailure(call: Call<GetAllNews>, t: Throwable) {
-                    Log.d("failure", t.message.toString())
-                    Toast.makeText(requireContext(), "${t.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
+                Status.ERROR -> {}
+            }
+        }
+        homeViewModel.getNews(country, apiKey)
+//        val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
+//        ApiClient.getInstance(requireContext()).getAllNews(country, apiKey).enqueue(
+//            object : Callback<GetAllNews> {
+//                override fun onResponse(call: Call<GetAllNews>, response: Response<GetAllNews>) {
+//                    val body = response.body()
+//                    val code = response.code()
+//                    if (code == 200) {
+//                        if (body != null) {
+//                            binding.pbLoading.visibility = View.GONE
+//                            adapter.submitData(body.articles)
+//                        }
+//                    } else if (code == 400) {
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "The request was unacceptable.",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    } else if (code == 401) {
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "Your API key was missing from the request, or wasn't correct.",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    } else if (code == 429) {
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "You made too many requests",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    } else if (code == 500) {
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "Something went wrong on our side.",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    } else {
+//                        Toast.makeText(requireContext(), "Server sedang sibuk", Toast.LENGTH_SHORT)
+//                            .show()
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<GetAllNews>, t: Throwable) {
+//                    Log.d("failure", t.message.toString())
+//                    Toast.makeText(requireContext(), "${t.message}", Toast.LENGTH_SHORT).show()
+//                }
+//            })
     }
 
-    private fun showList() {
+    private fun detailNews() {
         adapter = NewsAdapter(object : NewsAdapter.OnClickListener {
             override fun onClickItem(data: Article) {
                 val bundle = Bundle().apply {
@@ -153,8 +194,8 @@ class HomeFragment : Fragment() {
                 setPositiveButton("Ya") { dialog, which ->
                     dialog.dismiss()
                     homeViewModel.deleteUserPref()
-                    homeViewModel.user.observe(viewLifecycleOwner){
-                        if (it.id == UserPreferences.DEFAULT_ID && findNavController().currentDestination?.id == R.id.homeFragment){
+                    homeViewModel.user.observe(viewLifecycleOwner) {
+                        if (it.id == UserPreferences.DEFAULT_ID && findNavController().currentDestination?.id == R.id.homeFragment) {
                             binding.btnUpdate.visibility = View.GONE
                             binding.tvUsername.visibility = View.GONE
                             findNavController().navigate(R.id.action_homeFragment_to_homeLoginFragment)
@@ -200,7 +241,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getUser() {
-        homeViewModel.user.observe(viewLifecycleOwner){
+        homeViewModel.user.observe(viewLifecycleOwner) {
             binding.tvUsername.text = it.username
             val navigateUpdate =
                 HomeFragmentDirections.actionHomeFragmentToUpdateUserFragment(it)

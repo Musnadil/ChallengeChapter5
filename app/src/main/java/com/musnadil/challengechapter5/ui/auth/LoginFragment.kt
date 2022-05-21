@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.data.Repository
+import com.musnadil.challengechapter5.data.api.ApiClient
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
@@ -60,7 +61,10 @@ class LoginFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setUsername()
         userPreferences = UserPreferences(requireContext())
-        repository = Repository(UserDatabase.getInstance(requireContext()).userDao(),userPreferences)
+        repository = Repository(
+            ApiClient.getInstance(requireContext()),
+            UserDatabase.getInstance(requireContext()).userDao(),
+            userPreferences)
         authViewModel =ViewModelProvider(requireActivity(), ViewModelFactory(repository))[AuthViewModel::class.java]
         userLogin()
         setupLogo()

@@ -1,4 +1,4 @@
-package com.musnadil.challengechapter5.data.api.service
+package com.musnadil.challengechapter5.data.api
 
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerCollector
