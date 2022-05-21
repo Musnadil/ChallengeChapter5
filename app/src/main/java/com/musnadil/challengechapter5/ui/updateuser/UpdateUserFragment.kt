@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -25,20 +26,23 @@ import com.musnadil.challengechapter5.data.room.entity.User
 import com.musnadil.challengechapter5.ui.ViewModelFactory
 import com.musnadil.challengechapter5.ui.auth.AuthViewModel
 import com.musnadil.challengechapter5.ui.home.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.File
 
+@AndroidEntryPoint
 class UpdateUserFragment : DialogFragment() {
     private var _binding: FragmentUpdateUserBinding? = null
     private val binding get() = _binding!!
 
     //    var myDb: UserDatabase? = null
     private val args: UpdateUserFragmentArgs by navArgs()
-    lateinit var updateViewModel: UpdateViewModel
-    private lateinit var userPreferences: UserPreferences
-    private lateinit var repository: Repository
+//    lateinit var updateViewModel: UpdateViewModel
+//    private lateinit var userPreferences: UserPreferences
+//    private lateinit var repository: Repository
+    private val updateViewModel : UpdateViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,16 +58,16 @@ class UpdateUserFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 //        myDb = UserDatabase.getInstance(requireContext())
-        userPreferences = UserPreferences(requireContext())
-        repository = Repository(
-            ApiClient.getInstance(requireContext()),
-            UserDatabase.getInstance(requireContext()).userDao(),
-            userPreferences
-        )
-        updateViewModel = ViewModelProvider(
-            requireActivity(),
-            ViewModelFactory(repository)
-        )[UpdateViewModel::class.java]
+//        userPreferences = UserPreferences(requireContext())
+//        repository = Repository(
+//            ApiClient.getInstance(requireContext()),
+//            UserDatabase.getInstance(requireContext()).userDao(),
+//            userPreferences
+//        )
+//        updateViewModel = ViewModelProvider(
+//            requireActivity(),
+//            ViewModelFactory(repository)
+//        )[UpdateViewModel::class.java]
         updateViewModel.getDataUser()
         updateViewModel.user.observe(viewLifecycleOwner) {
             binding.etUsername.setText(it.username)

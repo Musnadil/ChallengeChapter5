@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
@@ -22,15 +23,18 @@ import com.musnadil.challengechapter5.data.api.Status
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
 import com.musnadil.challengechapter5.ui.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var homeViewModel: HomeViewModel
+//    private lateinit var homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel by viewModels()
     private val arrayPantun = mutableListOf<String>()
     private lateinit var adapter: NewsAdapter
-    private lateinit var repository: Repository
-    private lateinit var userPreferences: UserPreferences
+//    private lateinit var repository: Repository
+//    private lateinit var userPreferences: UserPreferences
 
 
     override fun onCreateView(
@@ -43,16 +47,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userPreferences = UserPreferences(requireContext())
-        repository = Repository(
-            ApiClient.getInstance(requireContext()),
-            UserDatabase.getInstance(requireContext()).userDao(),
-            userPreferences
-        )
-        homeViewModel = ViewModelProvider(
-            requireActivity(),
-            ViewModelFactory(repository)
-        )[HomeViewModel::class.java]
+//        userPreferences = UserPreferences(requireContext())
+//        repository = Repository(
+//            ApiClient.getInstance(requireContext()),
+//            UserDatabase.getInstance(requireContext()).userDao(),
+//            userPreferences
+//        )
+//        homeViewModel = ViewModelProvider(
+//            requireActivity(),
+//            ViewModelFactory(repository)
+//        )[HomeViewModel::class.java]
         homeViewModel.getDataUser()
         detailNews()
         arrayPantun.addAll(

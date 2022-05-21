@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.musnadil.challengechapter5.data.Repository
 import com.musnadil.challengechapter5.data.room.entity.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel(private val repository: Repository):ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor(private val repository: Repository):ViewModel() {
     private val  _resultRegister : MutableLiveData<Long> = MutableLiveData()
     val resultRegister : LiveData<Long> get() = _resultRegister
 

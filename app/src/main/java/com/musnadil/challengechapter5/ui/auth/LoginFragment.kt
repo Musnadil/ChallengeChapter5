@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -23,14 +24,17 @@ import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
 import com.musnadil.challengechapter5.ui.MainActivity
 import com.musnadil.challengechapter5.ui.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginFragment : DialogFragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var userPreferences: UserPreferences
-    private lateinit var authViewModel: AuthViewModel
-    private lateinit var repository: Repository
+//    private lateinit var userPreferences: UserPreferences
+//    private lateinit var authViewModel: AuthViewModel
+//    private lateinit var repository: Repository
+    private val authViewModel : AuthViewModel by viewModels()
 
     companion object {
         const val USERNAME = "username"
@@ -60,12 +64,12 @@ class LoginFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUsername()
-        userPreferences = UserPreferences(requireContext())
-        repository = Repository(
-            ApiClient.getInstance(requireContext()),
-            UserDatabase.getInstance(requireContext()).userDao(),
-            userPreferences)
-        authViewModel =ViewModelProvider(requireActivity(), ViewModelFactory(repository))[AuthViewModel::class.java]
+//        userPreferences = UserPreferences(requireContext())
+//        repository = Repository(
+//            ApiClient.getInstance(requireContext()),
+//            UserDatabase.getInstance(requireContext()).userDao(),
+//            userPreferences)
+//        authViewModel =ViewModelProvider(requireActivity(), ViewModelFactory(repository))[AuthViewModel::class.java]
         userLogin()
         setupLogo()
         binding.btnRegister.setOnClickListener {

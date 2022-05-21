@@ -10,23 +10,21 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.data.Repository
-import com.musnadil.challengechapter5.data.api.ApiClient
-import com.musnadil.challengechapter5.data.datastore.UserPreferences
-import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.data.room.entity.User
 import com.musnadil.challengechapter5.databinding.FragmentRegisterBinding
-import com.musnadil.challengechapter5.ui.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterFragment : DialogFragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private lateinit var userPreferences: UserPreferences
-    private lateinit var registerViewModel: AuthViewModel
-    private lateinit var repository: Repository
+//    private lateinit var userPreferences: UserPreferences
+//    private lateinit var registerViewModel: AuthViewModel
+//    private lateinit var repository: Repository
+    private val authViewModel : AuthViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -52,12 +50,12 @@ class RegisterFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userPreferences = UserPreferences(requireContext())
-        repository = Repository(
-            ApiClient.getInstance(requireContext()),
-            UserDatabase.getInstance(requireContext()).userDao(),
-            userPreferences)
-        registerViewModel = ViewModelProvider(requireActivity(), ViewModelFactory(repository))[AuthViewModel::class.java]
+//        userPreferences = UserPreferences(requireContext())
+//        repository = Repository(
+//            ApiClient.getInstance(requireContext()),
+//            UserDatabase.getInstance(requireContext()).userDao(),
+//            userPreferences)
+//        registerViewModel = ViewModelProvider(requireActivity(), ViewModelFactory(repository))[AuthViewModel::class.java]
         observeResult()
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -102,13 +100,13 @@ class RegisterFragment : DialogFragment() {
                     binding.etEmail.text.toString(),
                     binding.etPassowrd.text.toString()
                 )
-                registerViewModel.register(user)
+                authViewModel.register(user)
             }
         }
     }
 
     private fun observeResult() {
-        registerViewModel.resultRegister.observe(viewLifecycleOwner) {
+        authViewModel.resultRegister.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it != 0.toLong()) {
                     Toast.makeText(requireContext(), "Registration success", Toast.LENGTH_SHORT)

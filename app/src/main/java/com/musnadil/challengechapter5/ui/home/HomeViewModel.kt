@@ -8,11 +8,14 @@ import com.musnadil.challengechapter5.data.Repository
 import com.musnadil.challengechapter5.data.api.Resource
 import com.musnadil.challengechapter5.data.api.model.GetAllNews
 import com.musnadil.challengechapter5.data.room.entity.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
-class HomeViewModel(private val repository: Repository) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private val _user: MutableLiveData<User> = MutableLiveData()
     val user: LiveData<User> get() = _user

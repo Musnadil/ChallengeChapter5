@@ -1,5 +1,6 @@
 package com.musnadil.challengechapter5.data
 
+import com.musnadil.challengechapter5.data.api.ApiHelper
 import com.musnadil.challengechapter5.data.api.ApiService
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.data.room.dao.UserDao
@@ -7,7 +8,7 @@ import com.musnadil.challengechapter5.data.room.entity.User
 import kotlinx.coroutines.flow.Flow
 
 class Repository(
-    private val apiService: ApiService,
+    private val apiHelper: ApiHelper,
     private val userDao: UserDao,
     private val userPreferences: UserPreferences
 ) {
@@ -35,6 +36,6 @@ class Repository(
     suspend fun update(user: User): Int = userDao.updateItem(user)
 
     //api
-    suspend fun getNews(country: String, apiKey: String) = apiService.getAllNews(country, apiKey)
+    suspend fun getNews(country: String, apiKey: String) = apiHelper.getAllNews(country, apiKey)
 }
 

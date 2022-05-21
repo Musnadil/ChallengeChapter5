@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.musnadil.challengechapter5.data.Repository
 import com.musnadil.challengechapter5.data.room.entity.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UpdateViewModel(private val repository: Repository):ViewModel() {
+@HiltViewModel
+class UpdateViewModel @Inject constructor(private val repository: Repository):ViewModel() {
     private val _user : MutableLiveData<User> = MutableLiveData()
     val user : LiveData<User> get() = _user
 
