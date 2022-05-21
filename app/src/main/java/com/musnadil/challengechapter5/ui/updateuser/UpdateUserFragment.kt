@@ -11,25 +11,13 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.data.Repository
-import com.musnadil.challengechapter5.data.api.ApiClient
-import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.databinding.FragmentUpdateUserBinding
-import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.data.room.entity.User
-import com.musnadil.challengechapter5.ui.ViewModelFactory
-import com.musnadil.challengechapter5.ui.auth.AuthViewModel
-import com.musnadil.challengechapter5.ui.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.File
 
 @AndroidEntryPoint
@@ -37,11 +25,7 @@ class UpdateUserFragment : DialogFragment() {
     private var _binding: FragmentUpdateUserBinding? = null
     private val binding get() = _binding!!
 
-    //    var myDb: UserDatabase? = null
     private val args: UpdateUserFragmentArgs by navArgs()
-//    lateinit var updateViewModel: UpdateViewModel
-//    private lateinit var userPreferences: UserPreferences
-//    private lateinit var repository: Repository
     private val updateViewModel : UpdateViewModel by viewModels()
 
     override fun onCreateView(
@@ -56,18 +40,6 @@ class UpdateUserFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        myDb = UserDatabase.getInstance(requireContext())
-//        userPreferences = UserPreferences(requireContext())
-//        repository = Repository(
-//            ApiClient.getInstance(requireContext()),
-//            UserDatabase.getInstance(requireContext()).userDao(),
-//            userPreferences
-//        )
-//        updateViewModel = ViewModelProvider(
-//            requireActivity(),
-//            ViewModelFactory(repository)
-//        )[UpdateViewModel::class.java]
         updateViewModel.getDataUser()
         updateViewModel.user.observe(viewLifecycleOwner) {
             binding.etUsername.setText(it.username)
@@ -92,27 +64,7 @@ class UpdateUserFragment : DialogFragment() {
             updateViewModel.update(user)
             updateViewModel.setDataUser(user)
             updateViewModel.getDataUser()
-
             observeUpdate()
-
-
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            val result = myDb?.userDao()?.updateItem(user)
-//            runBlocking(Dispatchers.Main) {
-//                if (result != 0) {
-//                    Toast.makeText(
-//                        requireContext(), "User berhasil diupdate",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                } else {
-//                    Toast.makeText(requireContext(), "User gagal diupdate", Toast.LENGTH_SHORT)
-//                        .show()
-//                }
-//            }
-//            if (result != 0) {
-//                updateViewModel.setDataUser(user)
-//            }
-//        }
         }
     }
 

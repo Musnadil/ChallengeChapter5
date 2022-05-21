@@ -21,9 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class RegisterFragment : DialogFragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-//    private lateinit var userPreferences: UserPreferences
-//    private lateinit var registerViewModel: AuthViewModel
-//    private lateinit var repository: Repository
     private val authViewModel : AuthViewModel by viewModels()
 
 
@@ -50,12 +47,6 @@ class RegisterFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        userPreferences = UserPreferences(requireContext())
-//        repository = Repository(
-//            ApiClient.getInstance(requireContext()),
-//            UserDatabase.getInstance(requireContext()).userDao(),
-//            userPreferences)
-//        registerViewModel = ViewModelProvider(requireActivity(), ViewModelFactory(repository))[AuthViewModel::class.java]
         observeResult()
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

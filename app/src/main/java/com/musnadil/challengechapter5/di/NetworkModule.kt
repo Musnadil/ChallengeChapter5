@@ -1,13 +1,10 @@
 package com.musnadil.challengechapter5.di
 
 import android.content.Context
-import androidx.room.Room
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.musnadil.challengechapter5.data.api.ApiHelper
 import com.musnadil.challengechapter5.data.api.ApiService
-import com.musnadil.challengechapter5.data.room.dao.UserDao
-import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

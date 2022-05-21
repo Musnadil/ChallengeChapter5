@@ -1,7 +1,6 @@
 package com.musnadil.challengechapter5.data
 
 import com.musnadil.challengechapter5.data.api.ApiHelper
-import com.musnadil.challengechapter5.data.api.ApiService
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.data.room.dao.UserDao
 import com.musnadil.challengechapter5.data.room.entity.User

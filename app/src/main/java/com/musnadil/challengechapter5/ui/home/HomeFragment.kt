@@ -2,7 +2,6 @@ package com.musnadil.challengechapter5.ui.home
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,31 +9,25 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
-import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.adapter.NewsAdapter
-import com.musnadil.challengechapter5.data.Repository
-import com.musnadil.challengechapter5.data.api.model.Article
-import com.musnadil.challengechapter5.data.api.ApiClient
 import com.musnadil.challengechapter5.data.api.Status
-import com.musnadil.challengechapter5.data.room.database.UserDatabase
+import com.musnadil.challengechapter5.data.api.model.Article
+import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
-import com.musnadil.challengechapter5.ui.ViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-//    private lateinit var homeViewModel: HomeViewModel
     private val homeViewModel: HomeViewModel by viewModels()
     private val arrayPantun = mutableListOf<String>()
     private lateinit var adapter: NewsAdapter
-//    private lateinit var repository: Repository
-//    private lateinit var userPreferences: UserPreferences
+
 
 
     override fun onCreateView(
@@ -47,16 +40,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        userPreferences = UserPreferences(requireContext())
-//        repository = Repository(
-//            ApiClient.getInstance(requireContext()),
-//            UserDatabase.getInstance(requireContext()).userDao(),
-//            userPreferences
-//        )
-//        homeViewModel = ViewModelProvider(
-//            requireActivity(),
-//            ViewModelFactory(repository)
-//        )[HomeViewModel::class.java]
         homeViewModel.getDataUser()
         detailNews()
         arrayPantun.addAll(
@@ -115,52 +98,6 @@ class HomeFragment : Fragment() {
             }
         }
         homeViewModel.getNews(country, apiKey)
-//        val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
-//        ApiClient.getInstance(requireContext()).getAllNews(country, apiKey).enqueue(
-//            object : Callback<GetAllNews> {
-//                override fun onResponse(call: Call<GetAllNews>, response: Response<GetAllNews>) {
-//                    val body = response.body()
-//                    val code = response.code()
-//                    if (code == 200) {
-//                        if (body != null) {
-//                            binding.pbLoading.visibility = View.GONE
-//                            adapter.submitData(body.articles)
-//                        }
-//                    } else if (code == 400) {
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "The request was unacceptable.",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    } else if (code == 401) {
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "Your API key was missing from the request, or wasn't correct.",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    } else if (code == 429) {
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "You made too many requests",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    } else if (code == 500) {
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "Something went wrong on our side.",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    } else {
-//                        Toast.makeText(requireContext(), "Server sedang sibuk", Toast.LENGTH_SHORT)
-//                            .show()
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<GetAllNews>, t: Throwable) {
-//                    Log.d("failure", t.message.toString())
-//                    Toast.makeText(requireContext(), "${t.message}", Toast.LENGTH_SHORT).show()
-//                }
-//            })
     }
 
     private fun detailNews() {
