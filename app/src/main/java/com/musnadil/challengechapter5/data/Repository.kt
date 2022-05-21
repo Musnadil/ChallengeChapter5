@@ -6,10 +6,14 @@ import com.musnadil.challengechapter5.data.room.dao.UserDao
 import com.musnadil.challengechapter5.data.room.entity.User
 import kotlinx.coroutines.flow.Flow
 
-class Repository(private val apiService: ApiService, private val userDao: UserDao, private val userPreferences: UserPreferences){
+class Repository(
+    private val apiService: ApiService,
+    private val userDao: UserDao,
+    private val userPreferences: UserPreferences
+) {
 
     //data store
-    suspend fun saveToPref(user: User){
+    suspend fun saveToPref(user: User) {
         userPreferences.saveUserToPref(user)
     }
 
@@ -22,12 +26,15 @@ class Repository(private val apiService: ApiService, private val userDao: UserDa
     }
 
     //room
-    suspend fun register(user:User):Long = userDao.addUser(user)
+    suspend fun register(user: User): Long = userDao.addUser(user)
 
-    suspend fun login(username:String, password:String ):User{
+    suspend fun login(username: String, password: String): User {
         return userDao.getUser(username, password)
     }
 
+    suspend fun update(user: User): Int = userDao.updateItem(user)
+
     //api
-    suspend fun getNews(country : String, apiKey :String) = apiService.getAllNews(country,apiKey)
+    suspend fun getNews(country: String, apiKey: String) = apiService.getAllNews(country, apiKey)
 }
+

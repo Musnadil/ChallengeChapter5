@@ -16,10 +16,14 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.musnadil.challengechapter5.R
+import com.musnadil.challengechapter5.data.Repository
+import com.musnadil.challengechapter5.data.api.ApiClient
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.databinding.FragmentUpdateUserBinding
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.data.room.entity.User
+import com.musnadil.challengechapter5.ui.ViewModelFactory
+import com.musnadil.challengechapter5.ui.auth.AuthViewModel
 import com.musnadil.challengechapter5.ui.home.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,11 +33,12 @@ import java.io.File
 class UpdateUserFragment : DialogFragment() {
     private var _binding: FragmentUpdateUserBinding? = null
     private val binding get() = _binding!!
-    var myDb: UserDatabase? = null
-    private val args: UpdateUserFragmentArgs by navArgs()
-    lateinit var homeViewModel: HomeViewModel
 
+    //    var myDb: UserDatabase? = null
+    private val args: UpdateUserFragmentArgs by navArgs()
+    lateinit var updateViewModel: UpdateViewModel
     private lateinit var userPreferences: UserPreferences
+    private lateinit var repository: Repository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,19 +52,25 @@ class UpdateUserFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myDb = UserDatabase.getInstance(requireContext())
-        userPreferences = UserPreferences(requireContext())
 
-        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-        homeViewModel.getDataUser()
-        homeViewModel.user.observe(viewLifecycleOwner) {
+//        myDb = UserDatabase.getInstance(requireContext())
+        userPreferences = UserPreferences(requireContext())
+        repository = Repository(
+            ApiClient.getInstance(requireContext()),
+            UserDatabase.getInstance(requireContext()).userDao(),
+            userPreferences
+        )
+        updateViewModel = ViewModelProvider(
+            requireActivity(),
+            ViewModelFactory(repository)
+        )[UpdateViewModel::class.java]
+        updateViewModel.getDataUser()
+        updateViewModel.user.observe(viewLifecycleOwner) {
             binding.etUsername.setText(it.username)
             binding.etEmail.setText(it.email)
             binding.etPassowrd.setText(it.password)
         }
-        binding.btnUpdate.setOnClickListener {
-            updateUser()
-        }
+        updateUser()
 
         binding.btnAdd.setOnClickListener {
             openImagePicker()
@@ -67,30 +78,56 @@ class UpdateUserFragment : DialogFragment() {
     }
 
     private fun updateUser() {
-        val user = User(
-            args.user.id,
-            binding.etUsername.text.toString(),
-            binding.etEmail.text.toString(),
-            binding.etPassowrd.text.toString()
-        )
-        lifecycleScope.launch(Dispatchers.IO) {
-            val result = myDb?.userDao()?.updateItem(user)
-            runBlocking(Dispatchers.Main) {
-                if (result != 0) {
+        binding.btnUpdate.setOnClickListener {
+            val user = User(
+                args.user.id,
+                binding.etUsername.text.toString(),
+                binding.etEmail.text.toString(),
+                binding.etPassowrd.text.toString()
+            )
+            updateViewModel.update(user)
+            updateViewModel.setDataUser(user)
+            updateViewModel.getDataUser()
+
+            observeUpdate()
+
+
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            val result = myDb?.userDao()?.updateItem(user)
+//            runBlocking(Dispatchers.Main) {
+//                if (result != 0) {
+//                    Toast.makeText(
+//                        requireContext(), "User berhasil diupdate",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                } else {
+//                    Toast.makeText(requireContext(), "User gagal diupdate", Toast.LENGTH_SHORT)
+//                        .show()
+//                }
+//            }
+//            if (result != 0) {
+//                updateViewModel.setDataUser(user)
+//            }
+//        }
+        }
+    }
+
+    private fun observeUpdate() {
+        updateViewModel.resultUpdate.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it != 0) {
                     Toast.makeText(
                         requireContext(), "User berhasil diupdate",
                         Toast.LENGTH_SHORT
                     ).show()
+                    dialog?.dismiss()
                 } else {
                     Toast.makeText(requireContext(), "User gagal diupdate", Toast.LENGTH_SHORT)
                         .show()
                 }
             }
-            if (result != 0) {
-                homeViewModel.setDataUser(user)
-            }
+
         }
-        dialog?.dismiss()
     }
 
     private val startForProfileImageResult =
@@ -104,13 +141,15 @@ class UpdateUserFragment : DialogFragment() {
                     fileUri?.let { loadImage(it) }
                 }
                 ImagePicker.RESULT_ERROR -> {
-                    Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT)
+                        .show()
                 }
                 else -> {
 
                 }
             }
         }
+
     private fun loadImage(uri: Uri) {
         binding.apply {
             Glide.with(binding.root)

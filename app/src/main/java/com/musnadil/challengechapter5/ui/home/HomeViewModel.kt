@@ -20,12 +20,6 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
     private val _news: MutableLiveData<Resource<Response<GetAllNews>>> = MutableLiveData()
     val news: LiveData<Resource<Response<GetAllNews>>> get() = _news
 
-    fun setDataUser(user: User) {
-        viewModelScope.launch {
-            repository.saveToPref(user)
-        }
-    }
-
     fun getDataUser() {
         viewModelScope.launch {
             repository.getUserPref().collect {

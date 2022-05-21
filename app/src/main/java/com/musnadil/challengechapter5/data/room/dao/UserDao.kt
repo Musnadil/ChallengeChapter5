@@ -16,5 +16,5 @@ interface UserDao {
 
     //update
     @Update
-    fun updateItem(user: User):Int
+    suspend fun updateItem(user: User):Int
 }
