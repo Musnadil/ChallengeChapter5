@@ -16,19 +16,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.musnadil.challengechapter5.R
+import com.musnadil.challengechapter5.data.Repository
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
 import com.musnadil.challengechapter5.ui.MainActivity
+import com.musnadil.challengechapter5.ui.ViewModelFactory
 
 class LoginFragment : DialogFragment() {
 
-    private var myDb: UserDatabase? = null
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private lateinit var userPreferences: UserPreferences
     private lateinit var authViewModel: AuthViewModel
-    private lateinit var repository: AuthRepository
+    private lateinit var repository: Repository
 
     companion object {
         const val USERNAME = "username"
@@ -58,15 +59,17 @@ class LoginFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUsername()
-        myDb = UserDatabase.getInstance(requireContext())
         userPreferences = UserPreferences(requireContext())
-        repository = AuthRepository(UserDatabase.getInstance(requireContext()).userDao(),userPreferences)
-        authViewModel =ViewModelProvider(requireActivity(),AuthViewModelFactory(repository))[AuthViewModel::class.java]
+        repository = Repository(UserDatabase.getInstance(requireContext()).userDao(),userPreferences)
+        authViewModel =ViewModelProvider(requireActivity(), ViewModelFactory(repository))[AuthViewModel::class.java]
         userLogin()
         setupLogo()
         binding.btnRegister.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
-            dialog?.hide()
+            val navigate = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+            if (findNavController().currentDestination?.id == R.id.loginFragment){
+                findNavController().navigate(navigate)
+                dialog?.hide()
+            }
         }
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}

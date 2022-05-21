@@ -5,11 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.musnadil.challengechapter5.data.Repository
 import com.musnadil.challengechapter5.data.room.entity.User
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class AuthViewModel(private val repository: AuthRepository):ViewModel() {
+class AuthViewModel(private val repository: Repository):ViewModel() {
     private val  _resultRegister : MutableLiveData<Long> = MutableLiveData()
     val resultRegister : LiveData<Long> get() = _resultRegister
 

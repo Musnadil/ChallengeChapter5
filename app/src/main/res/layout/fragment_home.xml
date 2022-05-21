@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".ui.home.HomeFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -80,9 +80,9 @@
             android:maxLines="4"
             android:text="@string/pantun_tiga"
             android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@id/tv_username"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_username" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -97,14 +97,13 @@
 
     <Spinner
         android:id="@+id/spinner_country"
-        android:layout_width="150dp"
-        android:layout_marginEnd="16dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/tv_berita_hari_ini"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tv_berita_hari_ini"
         style="@style/home_title"
-        />
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_berita_hari_ini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_berita_hari_ini" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_berita"
@@ -112,19 +111,28 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="16dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spinner_country"
-        tools:listitem="@layout/item_berita"
         app:spanCount="2"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        />
-    <ProgressBar
+        tools:listitem="@layout/item_berita" />
+    <!--    <ProgressBar-->
+    <!--        android:id="@+id/pb_loading"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/tv_berita_hari_ini"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        -->
+    <!--        />-->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_berita_hari_ini"
+        android:indeterminate="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_berita_hari_ini" />
 </androidx.constraintlayout.widget.ConstraintLayout>

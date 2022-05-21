@@ -16,10 +16,14 @@ import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.adapter.NewsAdapter
+import com.musnadil.challengechapter5.data.Repository
 import com.musnadil.challengechapter5.data.api.model.Article
 import com.musnadil.challengechapter5.data.api.model.GetAllNews
 import com.musnadil.challengechapter5.data.api.service.ApiClient
+import com.musnadil.challengechapter5.data.room.dao.UserDao
+import com.musnadil.challengechapter5.data.room.database.UserDatabase
 import com.musnadil.challengechapter5.databinding.FragmentHomeBinding
+import com.musnadil.challengechapter5.ui.ViewModelFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,8 +34,9 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private val arrayPantun = mutableListOf<String>()
     private lateinit var adapter :NewsAdapter
-    private lateinit var repository: HomeRepository
+    private lateinit var repository: Repository
     private lateinit var userPreferences: UserPreferences
+    private lateinit var userDao : UserDao
 
 
 
@@ -46,9 +51,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         userPreferences = UserPreferences(requireContext())
-        repository = HomeRepository(userPreferences)
+        repository = Repository(UserDatabase.getInstance(requireContext()).userDao(),userPreferences)
         homeViewModel = ViewModelProvider(requireActivity(),
-            HomeViewModelFactory(repository)
+            ViewModelFactory(repository)
         )[HomeViewModel::class.java]
         homeViewModel.getDataUser()
         showList()

@@ -1,11 +1,11 @@
-package com.musnadil.challengechapter5.ui.auth
+package com.musnadil.challengechapter5.data
 
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
 import com.musnadil.challengechapter5.data.room.dao.UserDao
 import com.musnadil.challengechapter5.data.room.entity.User
 import kotlinx.coroutines.flow.Flow
 
-class AuthRepository(private val userDao: UserDao, private val userPreferences: UserPreferences){
+class Repository(private val userDao: UserDao, private val userPreferences: UserPreferences){
 
     suspend fun saveToPref(user: User){
         userPreferences.saveUserToPref(user)
@@ -13,6 +13,10 @@ class AuthRepository(private val userDao: UserDao, private val userPreferences: 
 
     fun getUserPref(): Flow<User> {
         return userPreferences.getUserFromPref()
+    }
+
+    suspend fun deletePref() {
+        userPreferences.deleteUserFromPref()
     }
 
     suspend fun register(user:User):Long = userDao.addUser(user)
