@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.musnadil.challengechapter5.BuildConfig
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.adapter.NewsAdapter
 import com.musnadil.challengechapter5.data.api.Status
@@ -27,7 +28,6 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
     private val arrayPantun = mutableListOf<String>()
     private lateinit var adapter: NewsAdapter
-
 
 
     override fun onCreateView(
@@ -49,12 +49,22 @@ class HomeFragment : Fragment() {
                 getString(R.string.pantun_tiga)
             )
         )
-        setPantun()
         logout()
-        setCountry()
         getUser()
         binding.tvPantun.setOnClickListener {
             setPantun()
+        }
+        setFlavor()
+    }
+
+    private fun setFlavor() {
+        if (BuildConfig.FLAVOR.equals("Berita")) {
+            fatchNews("id")
+            setPantun()
+            binding.spinnerCountry.visibility = View.GONE
+        } else {
+            binding.tvPantun.visibility = View.GONE
+            setCountry()
         }
     }
 
@@ -80,14 +90,14 @@ class HomeFragment : Fragment() {
                         }
                         429 -> {
                             Toast.makeText(
-                    requireContext(),
+                                requireContext(),
                                 "You made too many requests",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                         500 -> {
                             Toast.makeText(
-                    requireContext(),
+                                requireContext(),
                                 "Something went wrong on our side.",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -150,7 +160,25 @@ class HomeFragment : Fragment() {
 
     private fun setCountry() {
         val spinner = binding.spinnerCountry
-        val country = arrayOf("Indonesia", "Malaysia")
+        val country = arrayOf(
+            "China",
+            "India",
+            "Indonesia",
+            "Japan",
+            "Malaysia",
+            "Philippines",
+            "Poland",
+            "Portugal",
+            "Romania",
+            "Russia",
+            "Saudi Arabia",
+            "Serbia",
+            "Singapore",
+            "Thailand",
+            "Turkey",
+            "UAE",
+            "Ukraine"
+        )
         val arrayAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, country)
         spinner.adapter = arrayAdapter
@@ -162,10 +190,27 @@ class HomeFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                val countrySelected: String = if (country[position] == "Indonesia") {
-                    "id"
-                } else {
-                    "my"
+                val countrySelected: String = when (country[position]) {
+                    "China" -> "ch"
+                    "India" -> "in"
+                    "Indonesia" -> "id"
+                    "Japan" -> "jp"
+                    "Malaysia" -> "my"
+                    "Philippines" -> "ph"
+                    "Poland" -> "pl"
+                    "Portugal" -> "pt"
+                    "Romania" -> "ro"
+                    "Russia" -> "ru"
+                    "Saudi Arabia" -> "sa"
+                    "Serbia" -> "rs"
+                    "Singapore" -> "sg"
+                    "Thailand" -> "th"
+                    "Turkey" -> "tr"
+                    "UAE" -> "ae"
+                    "Ukraine" -> "ua"
+                    else -> {
+                        "ch"
+                    }
                 }
                 Toast.makeText(
                     requireContext(),

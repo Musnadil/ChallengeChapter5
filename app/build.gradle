@@ -26,11 +26,51 @@ android {
     }
 
     buildTypes {
+        debug{
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "news"
+    productFlavors{
+        Berita{
+            applicationId "com.musnadil.berita"
+            dimension "news"
+            versionCode 1
+            versionName "1.0"
+        }
+        News{
+            applicationId "com.musnadil.news"
+            dimension "news"
+            versionCode 1
+            versionName "1.0"
+        }
+    }
+
+    sourceSets{
+        Berita{
+            res{
+                srcDirs 'src/Berita/res'
+            }
+            java{
+                srcDirs 'src/Berita/java'
+            }
+        }
+        News{
+            res{
+                srcDirs 'src/News/res'
+            }
+            java{
+                srcDirs 'src/News/java'
+            }
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
