@@ -2,13 +2,13 @@ package com.musnadil.challengechapter5.data
 
 import com.musnadil.challengechapter5.data.api.ApiHelper
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
-import com.musnadil.challengechapter5.data.room.dao.UserDao
+import com.musnadil.challengechapter5.data.room.DbHelper
 import com.musnadil.challengechapter5.data.room.entity.User
 import kotlinx.coroutines.flow.Flow
 
 class Repository(
     private val apiHelper: ApiHelper,
-    private val userDao: UserDao,
+    private val dbHelper: DbHelper,
     private val userPreferences: UserPreferences
 ) {
 
@@ -26,13 +26,13 @@ class Repository(
     }
 
     //room
-    suspend fun register(user: User): Long = userDao.addUser(user)
+    suspend fun register(user: User): Long = dbHelper.addUser(user)
 
     suspend fun login(username: String, password: String): User {
-        return userDao.getUser(username, password)
+        return dbHelper.getUser(username, password)
     }
 
-    suspend fun update(user: User): Int = userDao.updateItem(user)
+    suspend fun update(user: User): Int = dbHelper.updateItem(user)
 
     //api
     suspend fun getNews(country: String, apiKey: String) = apiHelper.getAllNews(country, apiKey)

@@ -3,6 +3,7 @@ package com.musnadil.challengechapter5.di
 import com.musnadil.challengechapter5.data.Repository
 import com.musnadil.challengechapter5.data.api.ApiHelper
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
+import com.musnadil.challengechapter5.data.room.DbHelper
 import com.musnadil.challengechapter5.data.room.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -15,9 +16,9 @@ import dagger.hilt.android.scopes.ViewModelScoped
 object RepositoryModule {
     @ViewModelScoped
     @Provides
-    fun provideRepository(
+    fun provideRepositoryy(
         apiHelper: ApiHelper,
-        userDao: UserDao,
+        dbHelper: DbHelper,
         userPreferences: UserPreferences
-    ) = Repository(apiHelper,userDao,userPreferences)
+    ) = Repository(apiHelper,dbHelper,userPreferences)
 }
