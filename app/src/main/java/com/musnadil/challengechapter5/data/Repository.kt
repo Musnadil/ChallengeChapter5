@@ -32,7 +32,7 @@ class Repository(
         return dbHelper.getUser(username, password)
     }
 
-    suspend fun update(user: User): Int = dbHelper.updateItem(user)
+    suspend fun update(user: User): Int = dbHelper.updateUser(user)
 
     //api
     suspend fun getNews(country: String, apiKey: String) = apiHelper.getAllNews(country, apiKey)

@@ -10,8 +10,8 @@ import com.musnadil.challengechapter5.data.room.entity.User
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
 
 import org.junit.Before
 import org.junit.Test
@@ -24,18 +24,46 @@ class RepositoryTest {
     private lateinit var apiHelper: ApiHelper
     private lateinit var dbHelper: DbHelper
     private lateinit var userPreferences: UserPreferences
+    private lateinit var userDao: UserDao
 
     //system under test
     private lateinit var repository: Repository
 
+    val user = User(
+        null,
+        "admin",
+        "admin",
+        "admin",
+    )
 
     @Before
     fun setUp() {
         apiService = mockk()
-        dbHelper = mockk()
+        userDao = mockk()
+        dbHelper = DbHelper(userDao)
         userPreferences = mockk()
         apiHelper = ApiHelper(apiService)
         repository = Repository(apiHelper, dbHelper, userPreferences)
+    }
+
+    // room
+    @Test
+    fun register():Unit = runBlocking {
+        val responseRegister = mockk<Long>()
+
+        every {
+            runBlocking {
+                dbHelper.addUser(user)
+            }
+        } returns responseRegister
+
+        repository.register(user)
+
+        verify {
+            runBlocking {
+                dbHelper.addUser(user)
+            }
+        }
     }
 
     @Test
@@ -49,9 +77,65 @@ class RepositoryTest {
         }returns responseLogin
 
         repository.login("asd","asd")
+
         verify {
             runBlocking {
                 dbHelper.getUser("asd","asd")
+            }
+        }
+    }
+
+    @Test
+    fun update():Unit = runBlocking {
+        val responseLogin = mockk<Int>()
+        every {
+            runBlocking {
+                dbHelper.updateUser(user)
+            }
+        }returns responseLogin
+
+        repository.update(user)
+
+        verify {
+            runBlocking {
+                dbHelper.updateUser(user)
+            }
+        }
+    }
+
+    //Data Store
+    @Test
+    fun saveToPref():Unit = runBlocking {
+        val responseSaveUser = mockk<Unit>()
+        every {
+            runBlocking {
+                userPreferences.saveUserToPref(user)
+            }
+        } returns responseSaveUser
+
+        repository.saveToPref(user)
+
+        verify {
+            runBlocking {
+                userPreferences.saveUserToPref(user)
+            }
+        }
+    }
+
+    @Test
+    fun getUserPref():Unit = runBlocking {
+        val responseGetUser = mockk<Flow<User>>()
+        every {
+            runBlocking {
+                userPreferences.getUserFromPref()
+            }
+        }returns responseGetUser
+
+        repository.getUserPref()
+
+        verify {
+            runBlocking {
+                userPreferences.getUserFromPref()
             }
         }
     }

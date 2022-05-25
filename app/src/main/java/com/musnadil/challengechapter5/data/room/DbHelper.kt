@@ -7,6 +7,6 @@ import javax.inject.Inject
 class DbHelper @Inject constructor(private val userDao: UserDao) {
     suspend fun addUser(user: User): Long = userDao.addUser(user)
     suspend fun getUser(username: String, password: String):User = userDao.getUser(username,password)
-    suspend fun updateItem(user: User):Int = userDao.updateItem(user)
+    suspend fun updateUser(user: User):Int = userDao.updateUser(user)
 
 }
