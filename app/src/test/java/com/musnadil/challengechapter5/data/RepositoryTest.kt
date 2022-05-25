@@ -49,7 +49,7 @@ class RepositoryTest {
     // room
     @Test
     fun register():Unit = runBlocking {
-        val responseRegister = mockk<Long>()
+        val responseRegister = 1L
 
         every {
             runBlocking {
@@ -87,7 +87,7 @@ class RepositoryTest {
 
     @Test
     fun update():Unit = runBlocking {
-        val responseLogin = mockk<Int>()
+        val responseLogin = 1
         every {
             runBlocking {
                 dbHelper.updateUser(user)
