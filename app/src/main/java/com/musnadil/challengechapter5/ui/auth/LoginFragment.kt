@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.data.datastore.UserPreferences
+import com.musnadil.challengechapter5.databinding.FragmentHomeLoginBinding
 import com.musnadil.challengechapter5.databinding.FragmentLoginBinding
 import com.musnadil.challengechapter5.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,8 +82,8 @@ class LoginFragment : DialogFragment() {
             authViewModel.login(
                 binding.etUsername.text.toString(),
                 binding.etPassowrd.text.toString())
-            loginCheck()
         }
+        loginCheck()
     }
 
     private fun loginCheck() {
@@ -106,15 +107,9 @@ class LoginFragment : DialogFragment() {
                     "Selamat datang ${binding.etUsername.text.toString()}",
                     Toast.LENGTH_LONG
                 ).show()
-                val navigateHome =
-                    LoginFragmentDirections.actionLoginFragmentToHomeFragment(
-                        binding.etUsername.text.toString(),
-                        binding.etPassowrd.text.toString()
-                    )
                 authViewModel.setDataUser(user)
                 if (findNavController().currentDestination?.id == R.id.loginFragment){
-                    findNavController().navigate(navigateHome)
-
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
             }
         }

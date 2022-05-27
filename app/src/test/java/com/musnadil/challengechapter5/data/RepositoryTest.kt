@@ -29,7 +29,7 @@ class RepositoryTest {
     //system under test
     private lateinit var repository: Repository
 
-    val user = User(
+    private val user = User(
         null,
         "admin",
         "admin",
