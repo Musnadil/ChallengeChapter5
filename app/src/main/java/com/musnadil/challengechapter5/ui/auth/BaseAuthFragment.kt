@@ -10,25 +10,26 @@ import com.musnadil.challengechapter5.R
 import com.musnadil.challengechapter5.databinding.FragmentHomeLoginBinding
 
 class BaseAuthFragment : Fragment() {
-    private var _binding: FragmentHomeLoginBinding? = null
-    private val binding get() = _binding!!
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        findNavController().navigate(R.id.action_homeLoginFragment_to_loginFragment)
-        _binding = FragmentHomeLoginBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
+//    private var _binding: FragmentHomeLoginBinding? = null
+//    private val binding get() = _binding!!
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View {
+//        _binding = FragmentHomeLoginBinding.inflate(inflater, container, false)
+//        return binding.root
+//    }
+//
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        if(findNavController().currentDestination?.id == R.id.homeLoginFragment){
+//            findNavController().navigate(R.id.action_homeLoginFragment_to_loginFragment)
+//        }
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        _binding = null
+//    }
 
 }

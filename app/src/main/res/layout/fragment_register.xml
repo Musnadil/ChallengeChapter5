@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/rounded_dialog"
-    tools:context=".ui.auth.LoginFragment">
+    tools:context=".ui.auth.RegisterFragment">
 
     <TextView
         android:id="@+id/tv_signup"

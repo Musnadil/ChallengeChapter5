@@ -71,7 +71,7 @@ class RegisterFragment : DialogFragment() {
         binding.etConfirmPassowrd.addTextChangedListener(textWatcher)
 
         binding.btnSignIn.setOnClickListener {
-            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+//            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
             dialog?.hide()
         }
         signUpListener()
@@ -104,12 +104,12 @@ class RegisterFragment : DialogFragment() {
                         .show()
                     dialog?.hide()
                     val bundle = Bundle().apply {
-                        putString(LoginFragment.USERNAME, binding.etUsername.text.toString())
+//                        putString(LoginFragment.USERNAME, binding.etUsername.text.toString())
                     }
-                    findNavController().navigate(
-                        R.id.action_registerFragment_to_loginFragment,
-                        bundle
-                    )
+//                    findNavController().navigate(
+//                        R.id.action_registerFragment_to_loginFragment,
+//                        bundle
+//                    )
                 } else {
                     Toast.makeText(requireContext(), "Registration failed", Toast.LENGTH_SHORT)
                         .show()
@@ -126,7 +126,7 @@ class RegisterFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return object : Dialog(requireContext(), theme) {
             override fun onBackPressed() {
-                findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+//                findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
                 dialog?.hide()
             }
         }

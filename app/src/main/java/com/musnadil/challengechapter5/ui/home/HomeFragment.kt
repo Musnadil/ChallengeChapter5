@@ -149,7 +149,7 @@ class HomeFragment : Fragment() {
                         if (it.id == UserPreferences.DEFAULT_ID && findNavController().currentDestination?.id == R.id.homeFragment) {
                             binding.btnUpdate.visibility = View.GONE
                             binding.tvUsername.visibility = View.GONE
-                            findNavController().navigate(R.id.action_homeFragment_to_homeLoginFragment)
+                            findNavController().navigate(R.id.action_homeFragment_to_loginCompose)
                         }
                     }
                 }
