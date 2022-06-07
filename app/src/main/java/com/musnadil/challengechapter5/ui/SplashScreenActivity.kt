@@ -41,6 +41,7 @@ class SplashScreenActivity : AppCompatActivity() {
         LaunchedEffect(key1 = true) {
             delay(5000)
             startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+            finish()
         }
         Box(
             contentAlignment = Alignment.Center,
