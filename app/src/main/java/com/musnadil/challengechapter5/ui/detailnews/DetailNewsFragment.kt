@@ -5,20 +5,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -29,9 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.musnadil.challengechapter5.R
-//import com.musnadil.challengechapter5.databinding.FragmentDetailNewsBinding
 import com.musnadil.challengechapter5.ui.theme.ChallengeChapter5Theme
 import com.musnadil.challengechapter5.ui.theme.yellow
 import com.skydoves.landscapist.glide.GlideImage
@@ -48,15 +42,15 @@ class DetailNewsFragment : Fragment() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
-            var urlImage = arguments?.getString("img")
-            var title = arguments?.getString("title")
-            var sourceName = arguments?.getString("publisher")
-            var publishedAt = arguments?.getString("time_published")
-            var content = arguments?.getString(
+            val urlImage = arguments?.getString("img")
+            val title = arguments?.getString("title")
+            val sourceName = arguments?.getString("publisher")
+            val publishedAt = arguments?.getString("time_published")
+            val content = arguments?.getString(
                 "content",
                 "Tidak ada konten yang di tampilkan, silahkan klik tumbol kunjungi laman berita untuk melihat detail berita"
             )
-            var urlLaman = arguments?.getString("url_laman")
+            val urlLaman = arguments?.getString("url_laman")
             setContent {
                 ChallengeChapter5Theme {
                     Surface(
@@ -104,7 +98,7 @@ class DetailNewsFragment : Fragment() {
                 modifier = Modifier.height(250.dp)
             )
             Text(
-                text = "$title",
+                text = title,
                 style = TextStyle(
                     color = Color.Black,
                     fontSize = 18.sp,
@@ -115,7 +109,7 @@ class DetailNewsFragment : Fragment() {
 
             )
             Text(
-                text = "$sourceName",
+                text = sourceName,
                 textAlign = TextAlign.Left,
                 style = TextStyle(
                     color = Color.Black,
@@ -127,7 +121,7 @@ class DetailNewsFragment : Fragment() {
 
             )
             Text(
-                text = "$publishedAt",
+                text = publishedAt,
                 textAlign = TextAlign.Left,
                 style = TextStyle(
                     color = Color.Black,
@@ -139,7 +133,7 @@ class DetailNewsFragment : Fragment() {
 
             )
             Text(
-                text = "$content",
+                text = content,
                 style = TextStyle(
                     color = Color.Black,
                     fontSize = 16.sp,
