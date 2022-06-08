@@ -43,4 +43,3 @@ jobs:
       #Build project
       - name: Build project
         run: ./gradlew build
-          echo test, and deploy your project.
