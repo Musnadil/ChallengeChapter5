@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.musnadil.challengechapter5.R
@@ -130,8 +131,8 @@ class DetailNewsFragment : Fragment() {
                     fontWeight = FontWeight.Normal
                 ),
                 modifier = Modifier.padding(horizontal = 16.dp)
-
             )
+
             Text(
                 text = content,
                 style = TextStyle(
@@ -142,13 +143,16 @@ class DetailNewsFragment : Fragment() {
                 ),
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-
         }
     }
 
     @Composable
     fun ReadNews(urlLaman: String) {
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        ConstraintLayout(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxSize()) {
+            val (button,spacer) = createRefs()
             Button(
                 onClick = {
                     val bundle = Bundle().apply {
@@ -161,7 +165,11 @@ class DetailNewsFragment : Fragment() {
                 },
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = yellow),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(button) {
+                        bottom.linkTo(spacer.top)
+                    }
             ) {
                 Text(
                     text = "Baca Berita Lengkap",
@@ -173,6 +181,10 @@ class DetailNewsFragment : Fragment() {
                     )
                 )
             }
+            Spacer(modifier = Modifier.height(64.dp)
+                .constrainAs(spacer){
+                    bottom.linkTo(parent.bottom)
+                })
         }
     }
 
