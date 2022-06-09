@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
             setCountry()
         }
     }
-    //test CI-6
+    //test CI-7
 
     private fun fatchNews(country: String) {
         val apiKey = "de0e45bbc3fd4286b6d2cf8120c756ea"
