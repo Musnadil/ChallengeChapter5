@@ -7,162 +7,162 @@
     android:background="@drawable/rounded_dialog"
     tools:context=".ui.auth.LoginFragment">
 
-    <TextView
-        android:id="@+id/tv_signin"
-        style="@style/title_style"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/signin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_signin"-->
+<!--        style="@style/title_style"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:text="@string/signin"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_container"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:boxCornerRadiusBottomEnd="30dp"
-        app:boxCornerRadiusBottomStart="30dp"
-        app:boxCornerRadiusTopEnd="30dp"
-        app:boxCornerRadiusTopStart="30dp"
-        app:errorEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_signin">
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/username_container"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        app:boxCornerRadiusBottomEnd="30dp"-->
+<!--        app:boxCornerRadiusBottomStart="30dp"-->
+<!--        app:boxCornerRadiusTopEnd="30dp"-->
+<!--        app:boxCornerRadiusTopStart="30dp"-->
+<!--        app:errorEnabled="true"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_signin">-->
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_username"
-            style="@style/regular_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/username" />
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/et_username"-->
+<!--            style="@style/regular_style"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="@string/username" />-->
 
-    </com.google.android.material.textfield.TextInputLayout>
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password_container"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:boxCornerRadiusBottomEnd="30dp"
-        app:boxCornerRadiusBottomStart="30dp"
-        app:boxCornerRadiusTopEnd="30dp"
-        app:boxCornerRadiusTopStart="30dp"
-        app:errorEnabled="true"
-        app:passwordToggleEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/username_container">
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/password_container"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        app:boxCornerRadiusBottomEnd="30dp"-->
+<!--        app:boxCornerRadiusBottomStart="30dp"-->
+<!--        app:boxCornerRadiusTopEnd="30dp"-->
+<!--        app:boxCornerRadiusTopStart="30dp"-->
+<!--        app:errorEnabled="true"-->
+<!--        app:passwordToggleEnabled="true"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/username_container">-->
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_passowrd"
-            style="@style/regular_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/et_passowrd"-->
+<!--            style="@style/regular_style"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="@string/password"-->
+<!--            android:inputType="textPassword"-->
+<!--            />-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_login"
-        style="@style/regular_style"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/signin"
-        android:textAllCaps="true"
-        app:cornerRadius="30dp"
-        android:enabled="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password_container"/>
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/btn_login"-->
+<!--        style="@style/regular_style"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:text="@string/signin"-->
+<!--        android:textAllCaps="true"-->
+<!--        app:cornerRadius="30dp"-->
+<!--        android:enabled="false"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/password_container"/>-->
 
-    <View
-        android:id="@+id/separator"
-        android:layout_width="340dp"
-        android:layout_height="1dp"
-        android:alpha="0.5"
-        android:layout_marginTop="32dp"
-        android:background="@color/black"
-        app:layout_constraintEnd_toEndOf="@id/btn_login"
-        app:layout_constraintStart_toStartOf="@id/btn_login"
-        app:layout_constraintTop_toBottomOf="@id/btn_login" />
-    <View
-        android:layout_width="370dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="@id/btn_login"
-        app:layout_constraintStart_toStartOf="@id/btn_login"
-        app:layout_constraintTop_toBottomOf="@id/btn_login" />
+<!--    <View-->
+<!--        android:id="@+id/separator"-->
+<!--        android:layout_width="340dp"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:alpha="0.5"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:background="@color/black"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/btn_login"-->
+<!--        app:layout_constraintStart_toStartOf="@id/btn_login"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btn_login" />-->
+<!--    <View-->
+<!--        android:layout_width="370dp"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/btn_login"-->
+<!--        app:layout_constraintStart_toStartOf="@id/btn_login"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btn_login" />-->
 
-    <TextView
-        style="@style/regular_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="10dp"
-        android:text="@string/or"
-        app:layout_constraintBottom_toBottomOf="@id/separator"
-        app:layout_constraintEnd_toEndOf="@id/separator"
-        app:layout_constraintStart_toStartOf="@id/separator"
-        app:layout_constraintTop_toTopOf="@id/separator" />
+<!--    <TextView-->
+<!--        style="@style/regular_style"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/white"-->
+<!--        android:padding="10dp"-->
+<!--        android:text="@string/or"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/separator"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/separator"-->
+<!--        app:layout_constraintStart_toStartOf="@id/separator"-->
+<!--        app:layout_constraintTop_toTopOf="@id/separator" />-->
 
-    <ImageButton
-        android:id="@+id/ic_google"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/ic_google"
-        android:contentDescription="@string/img_google"
-        app:layout_constraintEnd_toStartOf="@id/ic_facebook"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/separator" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/ic_google"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:background="@drawable/ic_google"-->
+<!--        android:contentDescription="@string/img_google"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/ic_facebook"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/separator" />-->
 
-    <ImageButton
-        android:id="@+id/ic_facebook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_facebook"
-        android:contentDescription="@string/img_facebook"
-        app:layout_constraintEnd_toStartOf="@id/ic_twitter"
-        app:layout_constraintStart_toEndOf="@id/ic_google"
-        app:layout_constraintTop_toTopOf="@id/ic_google" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/ic_facebook"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/ic_facebook"-->
+<!--        android:contentDescription="@string/img_facebook"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/ic_twitter"-->
+<!--        app:layout_constraintStart_toEndOf="@id/ic_google"-->
+<!--        app:layout_constraintTop_toTopOf="@id/ic_google" />-->
 
-    <ImageButton
-        android:id="@+id/ic_twitter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_twitter"
-        android:contentDescription="@string/img_twitter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ic_facebook"
-        app:layout_constraintTop_toTopOf="@id/ic_google" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/ic_twitter"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/ic_twitter"-->
+<!--        android:contentDescription="@string/img_twitter"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/ic_facebook"-->
+<!--        app:layout_constraintTop_toTopOf="@id/ic_google" />-->
 
-    <TextView
-        android:id="@+id/tv_dont_have_account"
-        style="@style/regular_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:paddingBottom="16dp"
-        android:text="@string/don_t_have_an_account"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ic_google" />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_dont_have_account"-->
+<!--        style="@style/regular_style"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:paddingBottom="16dp"-->
+<!--        android:text="@string/don_t_have_an_account"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/ic_google" />-->
 
-    <TextView
-        android:id="@+id/btn_register"
-        style="@style/regular_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="@string/create_new_one"
-        android:textColor="@color/yellow"
-        app:layout_constraintStart_toEndOf="@id/tv_dont_have_account"
-        app:layout_constraintTop_toTopOf="@id/tv_dont_have_account" />
+<!--    <TextView-->
+<!--        android:id="@+id/btn_register"-->
+<!--        style="@style/regular_style"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="4dp"-->
+<!--        android:text="@string/create_new_one"-->
+<!--        android:textColor="@color/yellow"-->
+<!--        app:layout_constraintStart_toEndOf="@id/tv_dont_have_account"-->
+<!--        app:layout_constraintTop_toTopOf="@id/tv_dont_have_account" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
